@@ -1,24 +1,130 @@
 ---
-author: John Doe
+author: Jessica Jagdeo
 banner: img/banners/banner-4.jpg
 categories:
 - programming
-date: "2015-10-02T21:49:20+02:00"
+date: "February 11, 2020"
 tags:
-- golang
 - programming
 - theme
 - hugo
-title: Linked post
+title: Bonanza Creek Snowshow Hare Examination
 ---
 
-I'm a linked post in the menu. You can add other posts by adding the following line to the frontmatter:
+From 1999 to 2017, physical characteristics of snowshoe hares were observed and recorded in the Bonanza Creek Experimental Forest within Alaska (Kielland et al. 2017). This project utilizes the data obtained from this study to visualize the weight and sex of the observed snowshoe hares. In addition, this project explores the summary statistics of the recorded weights for both female and male snowshoe hares. 
 
-    menu = "main"
+#### 1. Load necessary packages.
+
+library(tidyverse)
+library(janitor)
+library(kableExtra)
+library(naniar)
+library(skimr)
+library(sf)
+library(tmap)
+
+#### 2. Read in the data: Snowshoe hare physical data in Bonanza Creek Experimental Forest: 1999-Present.
+
+snowshoe <- read_csv("showshoe_lter.csv") %>% 
+  select(date, sex, age, weight, hindft) 
+
+summary(snowshoe) # Determine if there are missing data: 535 NAs in weight column; 1747 NAs in weight column 
+
+gg_miss_var(snowshoe) # Visualize missing data: Over 2000 observations are missing an age
 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mauris nulla, vestibulum vel auctor sed, posuere eu lorem. Aliquam consequat augue ut accumsan mollis. Suspendisse malesuada sodales tincidunt. Vivamus sed erat ac augue bibendum porta sed id ipsum. Ut mollis mauris eget ligula sagittis cursus. Aliquam id pharetra tellus. Pellentesque sed tempus risus. Proin id hendrerit ante. Vestibulum vitae urna ut mauris ultricies dignissim. Ut ante turpis, tristique vitae sagittis quis, sagittis nec diam. Fusce pulvinar cursus porta. Vivamus maximus leo dolor, ut pellentesque lorem fringilla nec. Mauris faucibus turpis posuere sapien euismod, a ullamcorper mi maximus.
+#### 3. Clean the data based on NAs and and confirmed characteristics. 
 
-Morbi varius ex vel justo dictum placerat. Sed ac arcu pretium, varius elit eget, gravida purus. Fusce sit amet massa mollis eros tincidunt sollicitudin. Suspendisse iaculis cursus mauris ut sagittis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas elit ligula, molestie quis magna eu, semper posuere lorem. Mauris a justo pharetra, congue ex eget, tincidunt massa. Maecenas sit amet neque lorem.
+snowshoe_clean <- snowshoe %>% 
+  drop_na(weight) %>% # There are 500 missing weights out of over 3000 observations, a relatively small portion of total observations, so we can drop the observations without recorded weights
+  mutate(sex = str_to_upper(sex)) %>% # Capitalizing characters for aesthetics
+  mutate(age = str_to_upper(age)) %>% # Capitalizing characters for aesthetics
+  filter(sex == "M" |
+           sex == "F") # Only keeping observations in which sex was confirmed (only reduces our number of observations by 200)
+  
+snowshoe_clean$sex <- plyr::revalue(snowshoe_clean$sex, c("F" = "Female", "M" = "Male")) # Renaming "F" and "M" to "Female" and "Male", respectively for visualization
 
-Curabitur at elementum quam. Curabitur tristique elit non sapien aliquam vulputate. Vivamus in odio tincidunt, tempor sem quis, tincidunt lacus. Mauris pulvinar nunc sed tempus dictum. Nam vel arcu quis mi fermentum ullamcorper non ac lacus. Donec aliquet vitae ante at imperdiet. Aenean scelerisque venenatis urna, eget elementum risus convallis ac. Nullam gravida arcu lacus, non consectetur augue pretium non. Duis dignissim eros id urna pretium congue. Nullam eu magna in sem sollicitudin tempor. Pellentesque vel convallis ligula. Quisque semper, turpis a rhoncus efficitur, magna nibh iaculis elit, eget tempor dolor eros ut mi. Maecenas eu placerat lacus. Praesent congue pretium nulla, sed suscipit metus rutrum vel.
+
+gg_miss_var(snowshoe_clean) # Rechecking NAs - none for the weight column
+
+
+
+#### 4. Graph characteristics of observed snowshoe hares.
+
+# Creating a jitter plot to depict the weights (y axis) of both female and male snowshoe hares (x axis)
+
+snowshoe_plot <- ggplot(snowshoe_clean, 
+                        aes(x = sex, y = weight)) +
+  geom_jitter(size = 1, 
+              alpha = 0.8,
+              aes(color = sex,
+                  pch = sex)) +
+  theme_classic() +
+  labs(x = "Sex",
+       y = "Weight (g)") +
+  theme(legend.position = "none")
+
+snowshoe_plot
+
+
+Figure 1. Characteristics of Observed Snowshoe Hares at Bonanza Creek Experimental Forest.** Recordings of snowshoe hare sex and weight were made during the period of 1999 to 2017. Observations in which both sex and weight were conclusively recorded are depicted. Data source: Kielland et al. 2017. 
+
+Female and male snowshoe hares appear to have similar weights for the most part (Figure 1). However, several observed female snowshoe hares weighed about 2,500 grams, while no observed male snowshoe hare weighed more than 2,100 grams. 
+
+#### 5. Create kable table with summary statistics about observed snowshoe hare sex and weight.
+
+# Creating a data frame with summary statistics (mean, standard deviation, maximum, minimum, and median) for the weights of female and male snowshoe hares
+
+snowshoe_summary <- snowshoe_clean %>%
+  select(sex, weight) %>% 
+  group_by(sex) %>% 
+  summarise(
+    average_weight = round(mean(weight),0),
+    sd_weight = round(sd(weight),0),
+    max_weight = max(weight),
+    min_weight = min(weight),
+    median_weight = median(weight)
+  )
+
+snowshoe_table <- kable(snowshoe_summary,
+                         caption = "**Table 1. Summary statistics for the weights of female and male snowshoe hares observed in the Bonanza Creek Experimental Forest from 1999 to 2017.** Weights were recorded during capture-recapture studies, with a total of 2,628 complete observations obtained for sex and weight. Data source: Kielland et al. 2017.",
+                        col.names = c("Sex", "Mean (g)", "Standard Deviation (g)", "Maximum (g)", "Minimum (g)", "Median (g)")) %>% 
+  kable_styling(bootstrap_options = c("striped","hover", "condensed")) %>% 
+  column_spec(1, bold = T, border_right = T) 
+  
+
+snowshoe_table
+
+
+Visually, female and male snowshoe hares observed within the forest appear to have similar weights (Figure 1). The summary statistics depicted in Table 1 highlight that female snowshoe hares have an average weight that is 5 grams greater than the average weight of male snowshoe hares. In addition, the maximum weight recorded for female snowshoe hares (2,365 grams) is greater than the maximum recorded for male snowshoe hares (2,060 grams). Interestingly, both male and female snowshoe hares observed during this study had minimum weight records of 240 grams. 
+
+#### 6. Create a map of the study location. 
+
+# Creating a data frame with the 3 coordinates of the study sites within Bonanza Creek Experimental Forest
+
+sites <- tribble(
+  ~id, ~lon, ~lat,
+  "bonrip", -148.2682, 64.6991, 
+  "bonmat", -148.1734, 64.41417,
+  "bonbs", -148.2964, 64.7088
+)
+
+# Converting this data frame to "sf" object for visualization within a map
+
+sites_sf <- st_as_sf(sites, coords = c("lon", "lat"), crs = 4269)
+
+# Visualize site locations within an interactive map
+
+tmap_mode("view")
+
+sampling_sites <- tm_basemap("Esri.WorldImagery") +
+  tm_shape(sites_sf) +
+  tm_dots(labels = "id", col = "darkblue", size = 0.3)
+
+sampling_sites
+  
+
+
+Figure 2. Location of Bonanza Creek Experimental Forest. Snowshoe hares were observed at three different sites within the forest.
+
+Study citation: Kielland K., F. S. Chapin, R. W. Ruess. 2017. Snowshoe hare physical data in Bonanza Creek Experimental Forest: 1999-Present. Environmental Data Initiative.
