@@ -7,7 +7,7 @@
   <meta name="googlebot" content="index,follow,snippet,archive">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <title>Bonanza Creek Snowshow Hare Examination</title>
+  <title>Ignore</title>
   <meta name="author" content="Jessica Jagdeo" />
   
   
@@ -66,7 +66,7 @@
   
   <meta property="og:locale" content="en_us">
   <meta property="og:site_name" content="Jessica Jagdeo ESM 244 Blog">
-  <meta property="og:title" content="Bonanza Creek Snowshow Hare Examination">
+  <meta property="og:title" content="Ignore">
   <meta property="og:type" content="article">
   <meta property="og:url" content="/blog/1/01/01/linked-post/" />
   <meta property="og:description" content="Site template made by devcows using hugo">
@@ -96,7 +96,7 @@
   
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@GoHugoIO">
-  <meta name="twitter:title" content="Bonanza Creek Snowshow Hare Examination">
+  <meta name="twitter:title" content="Ignore">
   
   <meta name="twitter:image" content="/img/banners/banner-4.jpg">
   
@@ -119,9 +119,9 @@
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand home" href="/">
-                    <img src="/img/logo.png" alt="Bonanza Creek Snowshow Hare Examination logo" class="hidden-xs hidden-sm">
-                    <img src="/img/logo-small.png" alt="Bonanza Creek Snowshow Hare Examination logo" class="visible-xs visible-sm">
-                    <span class="sr-only">Bonanza Creek Snowshow Hare Examination - go to homepage</span>
+                    <img src="/img/logo.png" alt="Ignore logo" class="hidden-xs hidden-sm">
+                    <img src="/img/logo-small.png" alt="Ignore logo" class="visible-xs visible-sm">
+                    <span class="sr-only">Ignore - go to homepage</span>
                 </a>
                 <div class="navbar-buttons">
                     <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
@@ -192,7 +192,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Bonanza Creek Snowshow Hare Examination</h1>
+                <h1>Ignore</h1>
             </div>
         </div>
     </div>
@@ -217,82 +217,7 @@
                         
 
                         <div id="post-content">
-                          <p>From 1999 to 2017, physical characteristics of snowshoe hares were observed and recorded in the Bonanza Creek Experimental Forest within Alaska (Kielland et al. 2017). This project utilizes the data obtained from this study to visualize the weight and sex of the observed snowshoe hares. In addition, this project explores the summary statistics of the recorded weights for both female and male snowshoe hares.</p>
-<h4 id="1-load-necessary-packages">1. Load necessary packages.</h4>
-<p>library(tidyverse)
-library(janitor)
-library(kableExtra)
-library(naniar)
-library(skimr)
-library(sf)
-library(tmap)</p>
-<h4 id="2-read-in-the-data-snowshoe-hare-physical-data-in-bonanza-creek-experimental-forest-1999-present">2. Read in the data: Snowshoe hare physical data in Bonanza Creek Experimental Forest: 1999-Present.</h4>
-<p>snowshoe &lt;- read_csv(&ldquo;showshoe_lter.csv&rdquo;) %&gt;% 
-select(date, sex, age, weight, hindft)</p>
-<p>summary(snowshoe) # Determine if there are missing data: 535 NAs in weight column; 1747 NAs in weight column</p>
-<p>gg_miss_var(snowshoe) # Visualize missing data: Over 2000 observations are missing an age</p>
-<h4 id="3-clean-the-data-based-on-nas-and-and-confirmed-characteristics">3. Clean the data based on NAs and and confirmed characteristics.</h4>
-<p>snowshoe_clean &lt;- snowshoe %&gt;% 
-drop_na(weight) %&gt;% # There are 500 missing weights out of over 3000 observations, a relatively small portion of total observations, so we can drop the observations without recorded weights
-mutate(sex = str_to_upper(sex)) %&gt;% # Capitalizing characters for aesthetics
-mutate(age = str_to_upper(age)) %&gt;% # Capitalizing characters for aesthetics
-filter(sex == &ldquo;M&rdquo; |
-sex == &ldquo;F&rdquo;) # Only keeping observations in which sex was confirmed (only reduces our number of observations by 200)</p>
-<p>snowshoe_clean$sex &lt;- plyr::revalue(snowshoe_clean$sex, c(&ldquo;F&rdquo; = &ldquo;Female&rdquo;, &ldquo;M&rdquo; = &ldquo;Male&rdquo;)) # Renaming &ldquo;F&rdquo; and &ldquo;M&rdquo; to &ldquo;Female&rdquo; and &ldquo;Male&rdquo;, respectively for visualization</p>
-<p>gg_miss_var(snowshoe_clean) # Rechecking NAs - none for the weight column</p>
-<h4 id="4-graph-characteristics-of-observed-snowshoe-hares">4. Graph characteristics of observed snowshoe hares.</h4>
-<h1 id="creating-a-jitter-plot-to-depict-the-weights-y-axis-of-both-female-and-male-snowshoe-hares-x-axis">Creating a jitter plot to depict the weights (y axis) of both female and male snowshoe hares (x axis)</h1>
-<p>snowshoe_plot &lt;- ggplot(snowshoe_clean, 
-aes(x = sex, y = weight)) +
-geom_jitter(size = 1, 
-alpha = 0.8,
-aes(color = sex,
-pch = sex)) +
-theme_classic() +
-labs(x = &ldquo;Sex&rdquo;,
-y = &ldquo;Weight (g)&quot;) +
-theme(legend.position = &ldquo;none&rdquo;)</p>
-<p>snowshoe_plot</p>
-<p>Figure 1. Characteristics of Observed Snowshoe Hares at Bonanza Creek Experimental Forest.** Recordings of snowshoe hare sex and weight were made during the period of 1999 to 2017. Observations in which both sex and weight were conclusively recorded are depicted. Data source: Kielland et al. 2017.</p>
-<p>Female and male snowshoe hares appear to have similar weights for the most part (Figure 1). However, several observed female snowshoe hares weighed about 2,500 grams, while no observed male snowshoe hare weighed more than 2,100 grams.</p>
-<h4 id="5-create-kable-table-with-summary-statistics-about-observed-snowshoe-hare-sex-and-weight">5. Create kable table with summary statistics about observed snowshoe hare sex and weight.</h4>
-<h1 id="creating-a-data-frame-with-summary-statistics-mean-standard-deviation-maximum-minimum-and-median-for-the-weights-of-female-and-male-snowshoe-hares">Creating a data frame with summary statistics (mean, standard deviation, maximum, minimum, and median) for the weights of female and male snowshoe hares</h1>
-<p>snowshoe_summary &lt;- snowshoe_clean %&gt;%
-select(sex, weight) %&gt;% 
-group_by(sex) %&gt;% 
-summarise(
-average_weight = round(mean(weight),0),
-sd_weight = round(sd(weight),0),
-max_weight = max(weight),
-min_weight = min(weight),
-median_weight = median(weight)
-)</p>
-<p>snowshoe_table &lt;- kable(snowshoe_summary,
-caption = &ldquo;<strong>Table 1. Summary statistics for the weights of female and male snowshoe hares observed in the Bonanza Creek Experimental Forest from 1999 to 2017.</strong> Weights were recorded during capture-recapture studies, with a total of 2,628 complete observations obtained for sex and weight. Data source: Kielland et al. 2017.&quot;,
-col.names = c(&ldquo;Sex&rdquo;, &ldquo;Mean (g)&quot;, &ldquo;Standard Deviation (g)&quot;, &ldquo;Maximum (g)&quot;, &ldquo;Minimum (g)&quot;, &ldquo;Median (g)&quot;)) %&gt;% 
-kable_styling(bootstrap_options = c(&ldquo;striped&rdquo;,&ldquo;hover&rdquo;, &ldquo;condensed&rdquo;)) %&gt;% 
-column_spec(1, bold = T, border_right = T)</p>
-<p>snowshoe_table</p>
-<p>Visually, female and male snowshoe hares observed within the forest appear to have similar weights (Figure 1). The summary statistics depicted in Table 1 highlight that female snowshoe hares have an average weight that is 5 grams greater than the average weight of male snowshoe hares. In addition, the maximum weight recorded for female snowshoe hares (2,365 grams) is greater than the maximum recorded for male snowshoe hares (2,060 grams). Interestingly, both male and female snowshoe hares observed during this study had minimum weight records of 240 grams.</p>
-<h4 id="6-create-a-map-of-the-study-location">6. Create a map of the study location.</h4>
-<h1 id="creating-a-data-frame-with-the-3-coordinates-of-the-study-sites-within-bonanza-creek-experimental-forest">Creating a data frame with the 3 coordinates of the study sites within Bonanza Creek Experimental Forest</h1>
-<p>sites &lt;- tribble(
-~id, ~lon, ~lat,
-&ldquo;bonrip&rdquo;, -148.2682, 64.6991, 
-&ldquo;bonmat&rdquo;, -148.1734, 64.41417,
-&ldquo;bonbs&rdquo;, -148.2964, 64.7088
-)</p>
-<h1 id="converting-this-data-frame-to-sf-object-for-visualization-within-a-map">Converting this data frame to &ldquo;sf&rdquo; object for visualization within a map</h1>
-<p>sites_sf &lt;- st_as_sf(sites, coords = c(&ldquo;lon&rdquo;, &ldquo;lat&rdquo;), crs = 4269)</p>
-<h1 id="visualize-site-locations-within-an-interactive-map">Visualize site locations within an interactive map</h1>
-<p>tmap_mode(&ldquo;view&rdquo;)</p>
-<p>sampling_sites &lt;- tm_basemap(&ldquo;Esri.WorldImagery&rdquo;) +
-tm_shape(sites_sf) +
-tm_dots(labels = &ldquo;id&rdquo;, col = &ldquo;darkblue&rdquo;, size = 0.3)</p>
-<p>sampling_sites</p>
-<p>Figure 2. Location of Bonanza Creek Experimental Forest. Snowshoe hares were observed at three different sites within the forest.</p>
-<p>Study citation: Kielland K., F. S. Chapin, R. W. Ruess. 2017. Snowshoe hare physical data in Bonanza Creek Experimental Forest: 1999-Present. Environmental Data Initiative.</p>
-
+                          
                         </div>
                         
                         
@@ -381,7 +306,7 @@ tm_dots(labels = &ldquo;id&rdquo;, col = &ldquo;darkblue&rdquo;, size = 0.3)</p>
             </li>
             
             <li>
-                <a href="/categories/r">r (1)</a>
+                <a href="/categories/r">r (5)</a>
             </li>
             
             <li>
@@ -409,6 +334,10 @@ tm_dots(labels = &ldquo;id&rdquo;, col = &ldquo;darkblue&rdquo;, size = 0.3)</p>
     <div class="panel-body">
         <ul class="tag-cloud">
             
+            
+            <li>
+                <a href="/tags/eco"><i class="fas fa-tags"></i> eco</a>
+            </li>
             
             <li>
                 <a href="/tags/go"><i class="fas fa-tags"></i> go</a>
@@ -439,7 +368,19 @@ tm_dots(labels = &ldquo;id&rdquo;, col = &ldquo;darkblue&rdquo;, size = 0.3)</p>
             </li>
             
             <li>
+                <a href="/tags/runoff"><i class="fas fa-tags"></i> runoff</a>
+            </li>
+            
+            <li>
                 <a href="/tags/theme"><i class="fas fa-tags"></i> theme</a>
+            </li>
+            
+            <li>
+                <a href="/tags/water"><i class="fas fa-tags"></i> water</a>
+            </li>
+            
+            <li>
+                <a href="/tags/waterquality"><i class="fas fa-tags"></i> waterquality</a>
             </li>
             
         </ul>

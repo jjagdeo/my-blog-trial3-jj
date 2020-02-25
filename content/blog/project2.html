@@ -1,0 +1,108 @@
+---
+banner: img/banners/banner-1.jpg
+title: "Gibraltar Reservoir Capacity"
+author: "Jessica Jagdeo and Lydia Bleifuss"
+date: "10/30/2019"
+output: html_document
+categories: ["R"]
+tags: ["R Markdown", "plot", "hugo", "water"]
+---
+
+
+
+<pre class="r"><code># Load in necessary packages
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(lubridate)
+library(gghighlight)
+library(kableExtra)
+library(ggplot2)
+library(ggthemes)
+library(here)</code></pre>
+<pre class="r"><code># Load in the data and clean
+
+gibraltar_storage &lt;- read_excel(&quot;RAW_Gibraltar_Storage_Elevation_2001_2019.xls&quot;) %&gt;% 
+  rename(&quot;date&quot; = &quot;36892&quot;, &quot;capacity&quot; = &quot;3182&quot;, &quot;total_capacity&quot; = &quot;7500&quot;) %&gt;%
+  mutate(capacity_m3 = (capacity*1233.48))</code></pre>
+<p>Water storage in Gibraltar Reservoir</p>
+<pre class="r"><code>gibraltar_cap_plot &lt;- ggplot(gibraltar_storage, aes(x = date, y = capacity)) +
+  geom_area(color = &quot;darkblue&quot;, fill = &quot;darkblue&quot;) + # creates area rather than bars
+  theme_classic() +
+  labs(x = &quot;Year&quot;, 
+       y = &quot;Water (acre-feet)&quot;
+       ) +
+  ggtitle(&quot;Gibraltar Water Stored (2001 - 2018)\n&quot;) +
+  theme(plot.title = element_text(hjust=0.5)) +
+  theme(plot.title = element_text(size=12)) +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0, 15000),
+                     labels = scales::comma, 
+                     breaks = c(5000, 10000, 15000)) + 
+  geom_hline(yintercept = 7500, linetype = &quot;dashed&quot;, size = .8, color = &quot;black&quot;)  # Total possible water capacity was 7500 acre-feet in 2001 (when the data in this frame begins) 
+  #theme_black()
+  
+gibraltar_cap_plot</code></pre>
+<p><img src="/blog/project2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>gibraltar_total_bathymetric &lt;- read_excel(&quot;RAW_Table of Bathymetric Data at 1400 Elevation.xlsx&quot;) %&gt;% 
+  clean_names() %&gt;% 
+  slice(1:23) %&gt;%  # Kept years and capacity data &amp; excluded irrelevant data 
+  mutate(sed_inflow = case_when(
+    year &lt; 1945 ~ 14500 - volume_in_af,
+    year &gt; 1945 ~ 14800 - volume_in_af
+  )) %&gt;% # Used case_when to apply the different original capacities. For 1920 and 1944, the total original capacity is 14,500. For years after 1944, the total original capacity is 14,800 because the dam was raised (JJ)
+  mutate(sed_inflow_m3 = (sed_inflow*1233.48)) %&gt;%  # Converting from acre-feet to cubic meters
+  filter(volume_in_af != 8939.00) # Removing the May 1979 survey because there were 2 bathymetric surveys conducted in 1979. When we plot sed in the following graph, the volumes for each survey are added together, making 1979 unusually large (JJ)
+
+gibraltar_total_bathymetric</code></pre>
+<pre><code>## # A tibble: 22 x 9
+##    year  month contractor elevation volume_in_af change_from_pri~ notes
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;
+##  1 1920  &lt;NA&gt;  &lt;NA&gt;       &lt;NA&gt;            14500  &lt;NA&gt;             Orig~
+##  2 1944  &lt;NA&gt;  &lt;NA&gt;       &lt;NA&gt;             7600  &lt;NA&gt;             Take~
+##  3 1949  &lt;NA&gt;  &lt;NA&gt;       &lt;NA&gt;            14800  &lt;NA&gt;             Dam ~
+##  4 1969  Janu~ US Depart~ 1400             9708  &lt;NA&gt;             &lt;NA&gt; 
+##  5 1973  Janu~ US Depart~ 1400             9350  -358             &lt;NA&gt; 
+##  6 1979  Octo~ US Depart~ 1400             8986  47               &lt;NA&gt; 
+##  7 1982  Octo~ US Depart~ 1400             8589  -397             &lt;NA&gt; 
+##  8 1986  Sept~ ?          1400             8241. -347.7000000000~ &lt;NA&gt; 
+##  9 1989  Febr~ BBS Envir~ 1400             8486. 244.90000000000~ Dred~
+## 10 1992  June  MNS Engin~ 1400             8621. 134.39999999999~ &lt;NA&gt; 
+## # ... with 12 more rows, and 2 more variables: sed_inflow &lt;dbl&gt;,
+## #   sed_inflow_m3 &lt;dbl&gt;</code></pre>
+<pre class="r"><code>gibraltar_total_bathymetric$year = as.numeric(gibraltar_total_bathymetric$year)
+
+#note that for 1920 and 1944, the total original capacity should be 14500 and not 14800 </code></pre>
+<p>Sedimentation in Gibraltar Reservoir</p>
+<pre class="r"><code>cumulative_bathymetric_inflow &lt;- gibraltar_total_bathymetric %&gt;% 
+  mutate(cumulative_sed_inflow_m3 = case_when(
+    year &lt;= 1944 ~ sed_inflow_m3,
+    year &gt; 1944 ~ sed_inflow_m3 + 8511012))
+
+cumulative_bathymetric_inflow &lt;- cumulative_bathymetric_inflow %&gt;% 
+  mutate(cumulative_sed_inflow_af = cumulative_sed_inflow_m3/1233)
+
+gibraltar_vol_graph_report &lt;- ggplot(cumulative_bathymetric_inflow) +
+  # geom_bar(stat=&quot;identity&quot;, width = 1)+
+  geom_area(aes(x = year, y = cumulative_sed_inflow_af), color = &quot;burlywood4&quot;, fill = &quot;burlywood4&quot;, alpha = 0.6) +
+  labs(x = &quot;Year&quot;, 
+       y = &quot;Volume (acre-feet)&quot;) +
+  ggtitle(&quot;Gibraltar Reservoir Capacity Cross Section (1920 - 2019)&quot;)+
+  theme(plot.title = element_text(size=12))+
+  theme(plot.title = element_text(hjust=0.5)) +
+   scale_y_continuous(expand = c(0,0),
+                      limits = c(0,25000)) +
+  geom_segment(aes(x = 1920, y = 15322.502189, xend = 1949, yend = 15322.502189)) + # original design capacity of Gibraltar Reservoir was 15,374 acre feet
+  geom_segment(aes(x = 1949, y = 22537.860363, xend = 2019, yend = 22537.860363)) + # After its 1948 expansion the gross capacity was increased to 22,500 acre feet
+  geom_segment(aes(x = 1949, y = 15322.502189, xend = 1949, yend = 22537.860363)) +
+  scale_x_continuous(breaks = c(1920,1940,1960,1980,2000,2020),
+                     expand = c(0,0)) +
+  theme(panel.background = element_rect(fill = &quot;lightblue&quot;,
+                                colour = &quot;lightblue&quot;),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank()) 
+  
+
+gibraltar_vol_graph_report</code></pre>
+<p><img src="/blog/project2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>runoff on Jessica Jagdeo ESM 244 Blog</title>
+    <link>/tags/runoff/</link>
+    <description>Recent content in runoff on Jessica Jagdeo ESM 244 Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="/tags/runoff/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Examining Runoff Ratio in Santa Cruz Creek Sub-basin</title>
+      <link>/blog/1/01/01/project4/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/1/01/01/project4/</guid>
+      <description>library(tidyverse)library(readxl)library(lubridate)library(janitor)library(ggthemes)library(zoo)library(magrittr)library(gghighlight)library(tsibble)library(paletteer)Santa Cruz Gauge Observed Flow
+# Read in SC observed flow datasc_usgs_flow &amp;lt;- read_csv(&amp;quot;sc_creek_clean.csv&amp;quot;)sc_usgs_flow$dis_cfs &amp;lt;- as.numeric(as.character(sc_usgs_flow$dis_cfs))# Convert date from character to datesc_usgs_flow$date &amp;lt;- as.Date(sc_usgs_flow$date, &amp;quot;%m/%d/%Y&amp;quot;)# Create column for daily inflow in cumecs (cfs to cubic meters per second (cumecs)) sc_flow_cumecs &amp;lt;- sc_usgs_flow %&amp;gt;% mutate(dis_cumecs = (dis_cfs*0.03)) %&amp;gt;% select(date, dis_cumecs)Surface runoff calculation
+Divide aggregated monthly discharge by area (km) to obtain to meters of runoff.</description>
+    </item>
+    
+  </channel>
+</rss>

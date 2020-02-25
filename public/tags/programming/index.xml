@@ -11,13 +11,12 @@
     
     
     <item>
-      <title>Bonanza Creek Snowshow Hare Examination</title>
-      <link>/blog/1/01/01/linked-post/</link>
+      <title>Ignore</title>
+      <link>/universal_blogs/linked-post/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/blog/1/01/01/linked-post/</guid>
-      <description>From 1999 to 2017, physical characteristics of snowshoe hares were observed and recorded in the Bonanza Creek Experimental Forest within Alaska (Kielland et al. 2017). This project utilizes the data obtained from this study to visualize the weight and sex of the observed snowshoe hares. In addition, this project explores the summary statistics of the recorded weights for both female and male snowshoe hares.
-1. Load necessary packages. library(tidyverse) library(janitor) library(kableExtra) library(naniar) library(skimr) library(sf) library(tmap)</description>
+      <guid>/universal_blogs/linked-post/</guid>
+      <description></description>
     </item>
     
   </channel>

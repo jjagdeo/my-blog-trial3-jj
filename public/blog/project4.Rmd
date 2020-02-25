@@ -1,0 +1,174 @@
+---
+banner: img/banners/banner-1.jpg
+title: "Examining Runoff Ratio in Santa Cruz Creek Sub-basin"
+author: "Jessica Jagdeo"
+date: "1/13/2020"
+output: html_document
+categories: ["R"]
+tags: ["R Markdown", "plot", "hugo", "runoff"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+
+```{r}
+
+library(tidyverse)
+library(readxl)
+library(lubridate)
+library(janitor)
+library(ggthemes)
+library(zoo)
+library(magrittr)
+library(gghighlight)
+library(tsibble)
+library(paletteer)
+```
+
+*Santa Cruz Gauge Observed Flow*
+```{r}
+
+# Read in SC observed flow data
+
+sc_usgs_flow <- read_csv("sc_creek_clean.csv")
+
+sc_usgs_flow$dis_cfs <- as.numeric(as.character(sc_usgs_flow$dis_cfs))
+
+# Convert date from character to date
+
+sc_usgs_flow$date <- as.Date(sc_usgs_flow$date, "%m/%d/%Y")
+
+# Create column for daily inflow in cumecs (cfs to cubic meters per second (cumecs)) 
+
+sc_flow_cumecs <- sc_usgs_flow %>% 
+  mutate(dis_cumecs = (dis_cfs*0.03)) %>% 
+  select(date, dis_cumecs)
+
+```
+
+*Surface runoff calculation*
+
+Divide aggregated monthly discharge by area (km) to obtain to meters of runoff. 
+Compare this runoff to rainfall (mm) per month for subbasin 4.
+Try it for early and late months and high rainfall years and low rainfall years.
+
+```{r}
+
+options(scipen=999) #This code turns off scientific notation display in dataframes
+
+runoff_calc <- sc_flow_cumecs %>% 
+  separate(date, sep = "-", into = c("year", "month", "day")) %>% 
+  group_by(year, month) %>% 
+  mutate(runoff_ms = dis_cumecs/201300000) %>% #201.3 km^2 is the area of the subbasin 4. Converted it to meters to obtain runoff in meters per second.
+  mutate(runoff_md = runoff_ms*86400) %>%  #Converting runoff from meters per second to meters per day by multiplying by 86400 seconds in a day
+  mutate(runoff_mmd = runoff_md*1000) %>%  #Converting runoff from meters per day to millimeters per day for easy precip comparison
+  summarize(
+    monthly_runoff_mmd = sum(runoff_mmd)
+  ) 
+  
+
+```
+
+*Subbasin 4 Precipitation Data (Cachuma Station)*
+```{r}
+
+cachuma_precip <- read_xls("RAW_332dailys_SBcounty.xls") %>%
+  tail(-8) %>% 
+  row_to_names(row_number = 1) %>% 
+  clean_names() %>%
+  filter(year >= "1983" & year <= "2018") 
+  
+cachuma_precip$daily_rain<- as.numeric(cachuma_precip$daily_rain)
+
+cachuma_precip$date <- as.Date(with(cachuma_precip, paste(year, month, day, sep="-")), "%Y-%m-%d")
+
+cachuma_precip_calc <- cachuma_precip %>% 
+  select(date, daily_rain) %>% 
+  mutate(daily_rain_mm = daily_rain * 25.4) %>% 
+  separate(date, sep = "-", into = c("year", "month", "day")) %>%
+  group_by(year, month) %>%
+  summarize(
+    monthly_precip_mm = sum(daily_rain_mm)
+  )
+         
+```
+
+Combine monthly runoff and precip into one dataframe (insert 0s for months without rain)
+```{r}
+
+monthly_precip_runoff <- merge(cachuma_precip_calc, runoff_calc) %>% 
+  mutate(runoff_precip_ratio = monthly_runoff_mmd/monthly_precip_mm)
+
+monthly_precip_runoff$date <- as.yearmon(paste(monthly_precip_runoff$year, monthly_precip_runoff$month), "%Y %m")
+
+monthly_precip_runoff$date <- as.Date(monthly_precip_runoff$date)
+
+
+```
+
+Graph it
+```{r}
+
+monthly_ratio <- ggplot(monthly_precip_runoff, aes(x = date, y = runoff_precip_ratio)) +
+  geom_point() +
+  geom_line() +
+  theme_minimal() +
+  labs(x = "Year",
+       y = "Runoff/Precipitation Ratio") +
+  ggtitle("Runoff & Precipitation Ratio for Santa Ynez Watershed") +
+  scale_y_continuous(limits = c(0,1)) +
+  scale_x_date(date_breaks = "12 month", date_labels = "%b %Y") +
+  theme(axis.text.x=element_text(angle=60, hjust=1))
+
+monthly_ratio
+
+```
+
+Seasonality graph for all months:
+```{r}
+
+seasonal_runoff_plot <- ggplot(monthly_precip_runoff, aes(x = date, y = runoff_precip_ratio)) +
+  geom_line(aes(color = month)) +
+  theme_minimal() +
+  scale_color_paletteer_d("rcartocolor::Bold") +
+  scale_y_continuous(limits = c(0,1)) +
+  scale_x_date(date_breaks = "5 year", date_labels = "%Y") +
+  labs(x = "Year",
+       y = "Runoff Ratio") +
+  ggtitle("Santa Ynez Watershed Seasonal Runoff Ratio \n1983 - 2018")
+
+seasonal_runoff_plot
+
+# Takeaway: runoff ratio is highly variable in the watershed, even taking into consideration seasonality 
+
+```
+
+Seasonality graph for selected months (rainy season): 
+```{r}
+
+selected_seasons_plot <- monthly_precip_runoff %>% 
+  filter(month == "01"|
+           month == "02"|
+           month == "11"|
+           month == "12") %>% 
+  ggplot(aes(x = date, y = runoff_precip_ratio)) +
+  geom_line(aes(color = month)) +
+  theme_classic() +
+  scale_color_paletteer_d("rcartocolor::Bold") +
+  scale_color_discrete("Month", labels = c("January", "February", "November", "December")) +
+  scale_y_continuous(limits = c(0,1),
+                     expand = c(0,0)) +
+  scale_x_date(date_breaks = "5 year", date_labels = "%Y",
+               expand = c(0,0)) +
+  labs(x = "Year",
+       y = "Runoff Ratio") +
+  ggtitle("Santa Ynez Watershed Rainy Months Runoff Ratio (1983 - 2018)") +
+  theme(plot.title = element_text(hjust = 0.5, size = 12))
+
+selected_seasons_plot
+
+```

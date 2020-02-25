@@ -3,11 +3,6 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/blog/</loc>
-    <lastmod>2015-09-17T13:47:08+02:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/categories/</loc>
     <lastmod>2015-09-17T13:47:08+02:00</lastmod>
   </url>
@@ -18,7 +13,7 @@
   </url>
   
   <url>
-    <loc>/blog/2015/09/17/go-is-for-lovers/</loc>
+    <loc>/universal_blogs/go-is-for-lovers/</loc>
     <lastmod>2015-09-17T13:47:08+02:00</lastmod>
   </url>
   
@@ -38,12 +33,17 @@
   </url>
   
   <url>
+    <loc>/universal_blogs/</loc>
+    <lastmod>2015-09-17T13:47:08+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/hugo/</loc>
     <lastmod>2015-08-03T13:39:46+02:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2015/08/03/hugo-is-for-lovers/</loc>
+    <loc>/universal_blogs/hugo-is-for-lovers/</loc>
     <lastmod>2015-08-03T13:39:46+02:00</lastmod>
   </url>
   
@@ -53,7 +53,7 @@
   </url>
   
   <url>
-    <loc>/blog/2015/07/23/2015-07-23-r-rmarkdown/</loc>
+    <loc>/universal_blogs/2015-07-23-r-rmarkdown/</loc>
     <lastmod>2015-07-23T21:13:14-05:00</lastmod>
   </url>
   
@@ -78,7 +78,7 @@
   </url>
   
   <url>
-    <loc>/blog/2015/06/24/creating-a-new-theme/</loc>
+    <loc>/universal_blogs/creating-a-new-theme/</loc>
     <lastmod>2015-06-24T13:50:46+02:00</lastmod>
   </url>
   
@@ -93,7 +93,15 @@
   </url>
   
   <url>
-    <loc>/blog/1/01/01/linked-post/</loc>
+    <loc>/blog/1/01/01/project3/</loc>
+  </url>
+  
+  <url>
+    <loc>/blog/</loc>
+  </url>
+  
+  <url>
+    <loc>/blog/1/01/01/project1/</loc>
   </url>
   
   <url>
@@ -101,7 +109,23 @@
   </url>
   
   <url>
+    <loc>/tags/eco/</loc>
+  </url>
+  
+  <url>
+    <loc>/blog/1/01/01/project4/</loc>
+  </url>
+  
+  <url>
     <loc>/faq/</loc>
+  </url>
+  
+  <url>
+    <loc>/blog/1/01/01/project2/</loc>
+  </url>
+  
+  <url>
+    <loc>/universal_blogs/linked-post/</loc>
   </url>
   
   <url>
@@ -113,11 +137,23 @@
   </url>
   
   <url>
-    <loc>/blog/1/01/01/migrate-from-jekyll/</loc>
+    <loc>/universal_blogs/migrate-from-jekyll/</loc>
   </url>
   
   <url>
     <loc>/tags/programming/</loc>
+  </url>
+  
+  <url>
+    <loc>/tags/runoff/</loc>
+  </url>
+  
+  <url>
+    <loc>/tags/water/</loc>
+  </url>
+  
+  <url>
+    <loc>/tags/waterquality/</loc>
   </url>
   
 </urlset>

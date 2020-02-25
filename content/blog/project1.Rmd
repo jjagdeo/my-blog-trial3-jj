@@ -1,19 +1,23 @@
 ---
-author: Jessica Jagdeo
-banner: img/banners/banner-4.jpg
-categories:
-- programming
-date: "February 11, 2020"
-tags:
-- programming
-- theme
-- hugo
-title: Bonanza Creek Snowshow Hare Examination
+banner: img/banners/banner-1.jpg
+title: "Bonanza Creek Snowshow Hare Examination"
+author: "Jessica Jagdeo"
+date: "1/24/2020"
+output: html_document
+categories: ["R"]
+tags: ["R Markdown", "plot", "hugo", "eco"]
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
+```
 
 From 1999 to 2017, physical characteristics of snowshoe hares were observed and recorded in the Bonanza Creek Experimental Forest within Alaska (Kielland et al. 2017). This project utilizes the data obtained from this study to visualize the weight and sex of the observed snowshoe hares. In addition, this project explores the summary statistics of the recorded weights for both female and male snowshoe hares. 
 
 #### 1. Load necessary packages.
+```{r}
 
 library(tidyverse)
 library(janitor)
@@ -23,7 +27,9 @@ library(skimr)
 library(sf)
 library(tmap)
 
+```
 #### 2. Read in the data: Snowshoe hare physical data in Bonanza Creek Experimental Forest: 1999-Present.
+```{r}
 
 snowshoe <- read_csv("showshoe_lter.csv") %>% 
   select(date, sex, age, weight, hindft) 
@@ -32,8 +38,11 @@ summary(snowshoe) # Determine if there are missing data: 535 NAs in weight colum
 
 gg_miss_var(snowshoe) # Visualize missing data: Over 2000 observations are missing an age
 
+```
+
 
 #### 3. Clean the data based on NAs and and confirmed characteristics. 
+```{r}
 
 snowshoe_clean <- snowshoe %>% 
   drop_na(weight) %>% # There are 500 missing weights out of over 3000 observations, a relatively small portion of total observations, so we can drop the observations without recorded weights
@@ -47,9 +56,11 @@ snowshoe_clean$sex <- plyr::revalue(snowshoe_clean$sex, c("F" = "Female", "M" = 
 
 gg_miss_var(snowshoe_clean) # Rechecking NAs - none for the weight column
 
+```
 
 
 #### 4. Graph characteristics of observed snowshoe hares.
+```{r}
 
 # Creating a jitter plot to depict the weights (y axis) of both female and male snowshoe hares (x axis)
 
@@ -66,12 +77,14 @@ snowshoe_plot <- ggplot(snowshoe_clean,
 
 snowshoe_plot
 
+```
 
-Figure 1. Characteristics of Observed Snowshoe Hares at Bonanza Creek Experimental Forest.** Recordings of snowshoe hare sex and weight were made during the period of 1999 to 2017. Observations in which both sex and weight were conclusively recorded are depicted. Data source: Kielland et al. 2017. 
+**Figure 1. Characteristics of Observed Snowshoe Hares at Bonanza Creek Experimental Forest.** Recordings of snowshoe hare sex and weight were made during the period of 1999 to 2017. Observations in which both sex and weight were conclusively recorded are depicted. Data source: Kielland et al. 2017. 
 
 Female and male snowshoe hares appear to have similar weights for the most part (Figure 1). However, several observed female snowshoe hares weighed about 2,500 grams, while no observed male snowshoe hare weighed more than 2,100 grams. 
 
 #### 5. Create kable table with summary statistics about observed snowshoe hare sex and weight.
+```{r}
 
 # Creating a data frame with summary statistics (mean, standard deviation, maximum, minimum, and median) for the weights of female and male snowshoe hares
 
@@ -95,10 +108,13 @@ snowshoe_table <- kable(snowshoe_summary,
 
 snowshoe_table
 
+```
+
 
 Visually, female and male snowshoe hares observed within the forest appear to have similar weights (Figure 1). The summary statistics depicted in Table 1 highlight that female snowshoe hares have an average weight that is 5 grams greater than the average weight of male snowshoe hares. In addition, the maximum weight recorded for female snowshoe hares (2,365 grams) is greater than the maximum recorded for male snowshoe hares (2,060 grams). Interestingly, both male and female snowshoe hares observed during this study had minimum weight records of 240 grams. 
 
 #### 6. Create a map of the study location. 
+```{r}
 
 # Creating a data frame with the 3 coordinates of the study sites within Bonanza Creek Experimental Forest
 
@@ -124,7 +140,8 @@ sampling_sites <- tm_basemap("Esri.WorldImagery") +
 sampling_sites
   
 
+```
 
-Figure 2. Location of Bonanza Creek Experimental Forest. Snowshoe hares were observed at three different sites within the forest.
+**Figure 2. Location of Bonanza Creek Experimental Forest.** Snowshoe hares were observed at three different sites within the forest.
 
 Study citation: Kielland K., F. S. Chapin, R. W. Ruess. 2017. Snowshoe hare physical data in Bonanza Creek Experimental Forest: 1999-Present. Environmental Data Initiative.

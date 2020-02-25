@@ -1,0 +1,61 @@
+---
+title: "Assessment of Santa Ynez River Water Quality"
+author: "Jessica Jagdeo"
+date: "11/24/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+```
+
+```{r, include = FALSE}
+
+library(tidyverse)
+library(readxl)
+library(lubridate)
+library(janitor)
+library(ggthemes)
+library(zoo)
+library(ggplot2)
+library(scales)
+
+```
+
+Santa Ynez Water Quality Historical Data
+Data only goes back to 1998
+Turbidity units: NTU
+TSS and TDS units: mg/L
+```{r}
+
+santa_ynez_water_quality_raw <- read_csv("RAW_santa_ynez_water_quality.csv")
+
+santa_ynez_water_quality <- santa_ynez_water_quality_raw %>% 
+  select(OrganizationFormalName, ActivityStartDate, MonitoringLocationIdentifier, CharacteristicName, ResultSampleFractionText, ResultMeasureValue, "ResultMeasure/MeasureUnitCode") %>%  # Selecting only relevant columns 
+  filter(CharacteristicName == "Total dissolved solids"|
+           CharacteristicName == "Turbidity" |
+           CharacteristicName == "Total suspended solids") %>% 
+  separate(ActivityStartDate, sep = "-", into = c("year", "month", "day")) %>% 
+   group_by(year, month, CharacteristicName) %>% 
+  summarize(value = sum(ResultMeasureValue)) 
+
+santa_ynez_water_quality$date <- as.yearmon(paste(santa_ynez_water_quality$year, santa_ynez_water_quality$month), "%Y %m")
+
+```
+
+```{r}
+
+santa_ynez_historical_quality <- santa_ynez_water_quality %>% 
+  ggplot(aes(x = date, y = value)) +
+  geom_point(color = "darkgreen") +
+  facet_wrap(~CharacteristicName, scales = "free") +
+  theme_classic() +
+  xlab("\nDate") +
+  ylab("Sampling Result\n") +
+  ggtitle("Santa Ynez Watershed Turbidity, Total Suspended Solids, & Total Dissolved Solids\nMonthly 1998 - 2018")
+  
+  santa_ynez_historical_quality
+
+```

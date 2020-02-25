@@ -1,0 +1,124 @@
+---
+banner: img/banners/banner-1.jpg
+title: "Gibraltar Reservoir Capacity"
+author: "Jessica Jagdeo and Lydia Bleifuss"
+date: "10/30/2019"
+output: html_document
+categories: ["R"]
+tags: ["R Markdown", "plot", "hugo", "water"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+```{r}
+
+# Load in necessary packages
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(lubridate)
+library(gghighlight)
+library(kableExtra)
+library(ggplot2)
+library(ggthemes)
+library(here)
+
+```
+
+```{r}
+
+# Load in the data and clean
+
+gibraltar_storage <- read_excel("RAW_Gibraltar_Storage_Elevation_2001_2019.xls") %>% 
+  rename("date" = "36892", "capacity" = "3182", "total_capacity" = "7500") %>%
+  mutate(capacity_m3 = (capacity*1233.48))
+
+```
+
+Water storage in Gibraltar Reservoir
+
+```{r}
+
+gibraltar_cap_plot <- ggplot(gibraltar_storage, aes(x = date, y = capacity)) +
+  geom_area(color = "darkblue", fill = "darkblue") + # creates area rather than bars
+  theme_classic() +
+  labs(x = "Year", 
+       y = "Water (acre-feet)"
+       ) +
+  ggtitle("Gibraltar Water Stored (2001 - 2018)\n") +
+  theme(plot.title = element_text(hjust=0.5)) +
+  theme(plot.title = element_text(size=12)) +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0, 15000),
+                     labels = scales::comma, 
+                     breaks = c(5000, 10000, 15000)) + 
+  geom_hline(yintercept = 7500, linetype = "dashed", size = .8, color = "black")  # Total possible water capacity was 7500 acre-feet in 2001 (when the data in this frame begins) 
+  #theme_black()
+  
+gibraltar_cap_plot
+
+```
+
+
+```{r}
+
+
+gibraltar_total_bathymetric <- read_excel("RAW_Table of Bathymetric Data at 1400 Elevation.xlsx") %>% 
+  clean_names() %>% 
+  slice(1:23) %>%  # Kept years and capacity data & excluded irrelevant data 
+  mutate(sed_inflow = case_when(
+    year < 1945 ~ 14500 - volume_in_af,
+    year > 1945 ~ 14800 - volume_in_af
+  )) %>% # Used case_when to apply the different original capacities. For 1920 and 1944, the total original capacity is 14,500. For years after 1944, the total original capacity is 14,800 because the dam was raised (JJ)
+  mutate(sed_inflow_m3 = (sed_inflow*1233.48)) %>%  # Converting from acre-feet to cubic meters
+  filter(volume_in_af != 8939.00) # Removing the May 1979 survey because there were 2 bathymetric surveys conducted in 1979. When we plot sed in the following graph, the volumes for each survey are added together, making 1979 unusually large (JJ)
+
+gibraltar_total_bathymetric
+
+gibraltar_total_bathymetric$year = as.numeric(gibraltar_total_bathymetric$year)
+
+#note that for 1920 and 1944, the total original capacity should be 14500 and not 14800 
+```
+
+Sedimentation in Gibraltar Reservoir
+
+```{r}
+
+cumulative_bathymetric_inflow <- gibraltar_total_bathymetric %>% 
+  mutate(cumulative_sed_inflow_m3 = case_when(
+    year <= 1944 ~ sed_inflow_m3,
+    year > 1944 ~ sed_inflow_m3 + 8511012))
+
+cumulative_bathymetric_inflow <- cumulative_bathymetric_inflow %>% 
+  mutate(cumulative_sed_inflow_af = cumulative_sed_inflow_m3/1233)
+
+gibraltar_vol_graph_report <- ggplot(cumulative_bathymetric_inflow) +
+  # geom_bar(stat="identity", width = 1)+
+  geom_area(aes(x = year, y = cumulative_sed_inflow_af), color = "burlywood4", fill = "burlywood4", alpha = 0.6) +
+  labs(x = "Year", 
+       y = "Volume (acre-feet)") +
+  ggtitle("Gibraltar Reservoir Capacity Cross Section (1920 - 2019)")+
+  theme(plot.title = element_text(size=12))+
+  theme(plot.title = element_text(hjust=0.5)) +
+   scale_y_continuous(expand = c(0,0),
+                      limits = c(0,25000)) +
+  geom_segment(aes(x = 1920, y = 15322.502189, xend = 1949, yend = 15322.502189)) + # original design capacity of Gibraltar Reservoir was 15,374 acre feet
+  geom_segment(aes(x = 1949, y = 22537.860363, xend = 2019, yend = 22537.860363)) + # After its 1948 expansion the gross capacity was increased to 22,500 acre feet
+  geom_segment(aes(x = 1949, y = 15322.502189, xend = 1949, yend = 22537.860363)) +
+  scale_x_continuous(breaks = c(1920,1940,1960,1980,2000,2020),
+                     expand = c(0,0)) +
+  theme(panel.background = element_rect(fill = "lightblue",
+                                colour = "lightblue"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank()) 
+  
+
+gibraltar_vol_graph_report
+
+```
+
