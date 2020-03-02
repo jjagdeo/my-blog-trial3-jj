@@ -70,13 +70,13 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="/blog/1/01/01/project3/" />
   <meta property="og:description" content="Site template made by devcows using hugo">
-  <meta property="og:image" content="/img/banners/banner-1.jpg">
+  <meta property="og:image" content="/img/banners/moremesa.jpg">
   <meta property="og:image:type" content="image/jpg">
   
   
   
-    <meta property="og:image:width" content="1000">
-    <meta property="og:image:height" content="750">
+    <meta property="og:image:width" content="960">
+    <meta property="og:image:height" content="720">
   
   
   
@@ -99,7 +99,7 @@
   <meta name="twitter:site" content="@GoHugoIO">
   <meta name="twitter:title" content="Assessment of Santa Ynez River Water Quality">
   
-  <meta name="twitter:image" content="/img/banners/banner-1.jpg">
+  <meta name="twitter:image" content="/img/banners/moremesa.jpg">
   
   <meta name="twitter:description" content="Site template made by devcows using hugo">
   
@@ -121,7 +121,7 @@
             <div class="navbar-header">
                 <a class="navbar-brand home" href="/">
                     <img src="/img/logo.png" alt="Assessment of Santa Ynez River Water Quality logo" class="hidden-xs hidden-sm">
-                    <img src="/img/logo-small.png" alt="Assessment of Santa Ynez River Water Quality logo" class="visible-xs visible-sm">
+                    <img src="/" alt="Assessment of Santa Ynez River Water Quality logo" class="visible-xs visible-sm">
                     <span class="sr-only">Assessment of Santa Ynez River Water Quality - go to homepage</span>
                 </a>
                 <div class="navbar-buttons">
@@ -147,7 +147,7 @@
                   
                   <li class="dropdown active">
                     
-                    <a href="/blog/">Blog</a>
+                    <a href="/blog/">Projects</a>
                     
                   </li>
                   
@@ -221,8 +221,22 @@
                           
 
 
+<p>The quality of water within a watershed affects people who rely on surficial water for drinking, as well as the local wildlife. The Santa Ynez River flows into the Gibraltar Reservoir and Lake Cachuma and water is diverted from these reservoirs to nearby cities. The Santa Ynez Watershed supplies water to residents within the City of Santa Barbara, Goleta, Montecito, and other towns. Since 1998, water quality measurements have been taken along the Santa Ynez River. This project visualizes the turbidity and amount of total dissolved solids and total suspended solids recorded by water samples.</p>
+<div id="load-necessary-packages." class="section level4">
+<h4>1. Load necessary packages.</h4>
+<pre class="r"><code>library(tidyverse)
+library(readxl)
+library(lubridate)
+library(janitor)
+library(ggthemes)
+library(zoo)
+library(ggplot2)
+library(scales)</code></pre>
+</div>
+<div id="load-in-the-data-and-clean" class="section level4">
+<h4>2. Load in the data and clean</h4>
 <p>Santa Ynez Water Quality Historical Data
-Data only goes back to 1998
+Data Source:
 Turbidity units: NTU
 TSS and TDS units: mg/L</p>
 <pre class="r"><code>santa_ynez_water_quality_raw &lt;- read_csv(&quot;RAW_santa_ynez_water_quality.csv&quot;)
@@ -237,17 +251,23 @@ santa_ynez_water_quality &lt;- santa_ynez_water_quality_raw %&gt;%
   summarize(value = sum(ResultMeasureValue)) 
 
 santa_ynez_water_quality$date &lt;- as.yearmon(paste(santa_ynez_water_quality$year, santa_ynez_water_quality$month), &quot;%Y %m&quot;)</code></pre>
+</div>
+<div id="graph-turbidity-total-suspended-solids-and-total-dissolved-solids-samples" class="section level4">
+<h4>3. Graph turbidity, total suspended solids, and total dissolved solids samples</h4>
 <pre class="r"><code>santa_ynez_historical_quality &lt;- santa_ynez_water_quality %&gt;% 
   ggplot(aes(x = date, y = value)) +
   geom_point(color = &quot;darkgreen&quot;) +
   facet_wrap(~CharacteristicName, scales = &quot;free&quot;) +
   theme_classic() +
-  xlab(&quot;\nDate&quot;) +
+  xlab(&quot;\nYear&quot;) +
   ylab(&quot;Sampling Result\n&quot;) +
-  ggtitle(&quot;Santa Ynez Watershed Turbidity, Total Suspended Solids, &amp; Total Dissolved Solids\nMonthly 1998 - 2018&quot;)
+  ggtitle(&quot;Santa Ynez Watershed Turbidity, Total Suspended Solids, &amp; Total Dissolved Solids\nMonthly 1998 - 2018&quot;) +
+  theme(plot.title = element_text(hjust=0.5)) +
+  theme(plot.title = element_text(size=12))
   
   santa_ynez_historical_quality</code></pre>
 <p><img src="/blog/project3_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
 
                         </div>
                         
@@ -456,54 +476,7 @@ santa_ynez_water_quality$date &lt;- as.yearmon(paste(santa_ynez_water_quality$ye
 
         <div class="col-md-4 col-sm-6">
 
-             
-            <h4>Recent posts</h4>
-
-            <div class="blog-entries">
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
-                        <a href="/blog/1/01/01/project3/">
-                          
-                            <img src="/img/banners/banner-1.jpg" class="img-responsive" alt="Assessment of Santa Ynez River Water Quality">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="/blog/1/01/01/project3/">Assessment of Santa Ynez River Water Quality</a></h5>
-                    </div>
-                </div>
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
-                        <a href="/blog/1/01/01/project1/">
-                          
-                            <img src="/img/banners/banner-1.jpg" class="img-responsive" alt="Bonanza Creek Snowshow Hare Examination">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="/blog/1/01/01/project1/">Bonanza Creek Snowshow Hare Examination</a></h5>
-                    </div>
-                </div>
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
-                        <a href="/blog/1/01/01/project4/">
-                          
-                            <img src="/img/banners/banner-1.jpg" class="img-responsive" alt="Examining Runoff Ratio in Santa Cruz Creek Sub-basin">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="/blog/1/01/01/project4/">Examining Runoff Ratio in Santa Cruz Creek Sub-basin</a></h5>
-                    </div>
-                </div>
-                
-            </div>
-
-            <hr class="hidden-md hidden-lg">
-             
+              
 
         </div>
         

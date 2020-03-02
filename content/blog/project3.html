@@ -1,5 +1,5 @@
 ---
-banner: img/banners/banner-1.jpg
+banner: img/banners/moremesa.jpg
 title: "Assessment of Santa Ynez River Water Quality"
 author: "Jessica Jagdeo"
 date: "11/24/2019"
@@ -10,8 +10,22 @@ tags: ["R Markdown", "plot", "hugo", "waterquality"]
 
 
 
+<p>The quality of water within a watershed affects people who rely on surficial water for drinking, as well as the local wildlife. The Santa Ynez River flows into the Gibraltar Reservoir and Lake Cachuma and water is diverted from these reservoirs to nearby cities. The Santa Ynez Watershed supplies water to residents within the City of Santa Barbara, Goleta, Montecito, and other towns. Since 1998, water quality measurements have been taken along the Santa Ynez River. This project visualizes the turbidity and amount of total dissolved solids and total suspended solids recorded by water samples.</p>
+<div id="load-necessary-packages." class="section level4">
+<h4>1. Load necessary packages.</h4>
+<pre class="r"><code>library(tidyverse)
+library(readxl)
+library(lubridate)
+library(janitor)
+library(ggthemes)
+library(zoo)
+library(ggplot2)
+library(scales)</code></pre>
+</div>
+<div id="load-in-the-data-and-clean" class="section level4">
+<h4>2. Load in the data and clean</h4>
 <p>Santa Ynez Water Quality Historical Data
-Data only goes back to 1998
+Data Source:
 Turbidity units: NTU
 TSS and TDS units: mg/L</p>
 <pre class="r"><code>santa_ynez_water_quality_raw &lt;- read_csv(&quot;RAW_santa_ynez_water_quality.csv&quot;)
@@ -26,14 +40,20 @@ santa_ynez_water_quality &lt;- santa_ynez_water_quality_raw %&gt;%
   summarize(value = sum(ResultMeasureValue)) 
 
 santa_ynez_water_quality$date &lt;- as.yearmon(paste(santa_ynez_water_quality$year, santa_ynez_water_quality$month), &quot;%Y %m&quot;)</code></pre>
+</div>
+<div id="graph-turbidity-total-suspended-solids-and-total-dissolved-solids-samples" class="section level4">
+<h4>3. Graph turbidity, total suspended solids, and total dissolved solids samples</h4>
 <pre class="r"><code>santa_ynez_historical_quality &lt;- santa_ynez_water_quality %&gt;% 
   ggplot(aes(x = date, y = value)) +
   geom_point(color = &quot;darkgreen&quot;) +
   facet_wrap(~CharacteristicName, scales = &quot;free&quot;) +
   theme_classic() +
-  xlab(&quot;\nDate&quot;) +
+  xlab(&quot;\nYear&quot;) +
   ylab(&quot;Sampling Result\n&quot;) +
-  ggtitle(&quot;Santa Ynez Watershed Turbidity, Total Suspended Solids, &amp; Total Dissolved Solids\nMonthly 1998 - 2018&quot;)
+  ggtitle(&quot;Santa Ynez Watershed Turbidity, Total Suspended Solids, &amp; Total Dissolved Solids\nMonthly 1998 - 2018&quot;) +
+  theme(plot.title = element_text(hjust=0.5)) +
+  theme(plot.title = element_text(size=12))
   
   santa_ynez_historical_quality</code></pre>
 <p><img src="/blog/project3_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>

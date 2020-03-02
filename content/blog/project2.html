@@ -1,7 +1,7 @@
 ---
-banner: img/banners/banner-1.jpg
+banner: img/banners/symountains.jpg
 title: "Gibraltar Reservoir Capacity"
-author: "Jessica Jagdeo and Lydia Bleifuss"
+author: "Jessica Jagdeo, Lydia Bleifuss, Camila Bobroff"
 date: "10/30/2019"
 output: html_document
 categories: ["R"]
@@ -10,9 +10,10 @@ tags: ["R Markdown", "plot", "hugo", "water"]
 
 
 
-<pre class="r"><code># Load in necessary packages
-
-library(tidyverse)
+<p>Construction of Gibraltar Reservoir finished in 1920. The capacity of the reservoir was supposed to be slightly over 20,000 acre-feet, but sedimentation had already reduced the water storage capacity of the reservoir to about 15,000 acre-feet. Since 1920, Gibraltar has faced issues from sedimentation. In 1949, the City of Santa Barbara had to raise Gibraltar Dam due to the amount of sediment accumulating within its confines. Raising the dam maintained the water storage capacity of about 15,000 acre-feet. This project visualizes annual water storage and total water storage capacity of Gibraltar Reservoir.</p>
+<div id="load-in-necessary-packages" class="section level4">
+<h4>1. Load in necessary packages</h4>
+<pre class="r"><code>library(tidyverse)
 library(readxl)
 library(janitor)
 library(lubridate)
@@ -21,12 +22,15 @@ library(kableExtra)
 library(ggplot2)
 library(ggthemes)
 library(here)</code></pre>
-<pre class="r"><code># Load in the data and clean
-
-gibraltar_storage &lt;- read_excel(&quot;RAW_Gibraltar_Storage_Elevation_2001_2019.xls&quot;) %&gt;% 
+</div>
+<div id="load-in-the-data-and-clean" class="section level4">
+<h4>2. Load in the data and clean</h4>
+<pre class="r"><code>gibraltar_storage &lt;- read_excel(&quot;RAW_Gibraltar_Storage_Elevation_2001_2019.xls&quot;) %&gt;% 
   rename(&quot;date&quot; = &quot;36892&quot;, &quot;capacity&quot; = &quot;3182&quot;, &quot;total_capacity&quot; = &quot;7500&quot;) %&gt;%
   mutate(capacity_m3 = (capacity*1233.48))</code></pre>
-<p>Water storage in Gibraltar Reservoir</p>
+</div>
+<div id="water-storage-in-gibraltar-reservoir" class="section level2">
+<h2>Water storage in Gibraltar Reservoir</h2>
 <pre class="r"><code>gibraltar_cap_plot &lt;- ggplot(gibraltar_storage, aes(x = date, y = capacity)) +
   geom_area(color = &quot;darkblue&quot;, fill = &quot;darkblue&quot;) + # creates area rather than bars
   theme_classic() +
@@ -74,7 +78,9 @@ gibraltar_total_bathymetric</code></pre>
 <pre class="r"><code>gibraltar_total_bathymetric$year = as.numeric(gibraltar_total_bathymetric$year)
 
 #note that for 1920 and 1944, the total original capacity should be 14500 and not 14800 </code></pre>
-<p>Sedimentation in Gibraltar Reservoir</p>
+</div>
+<div id="sedimentation-in-gibraltar-reservoir" class="section level2">
+<h2>Sedimentation in Gibraltar Reservoir</h2>
 <pre class="r"><code>cumulative_bathymetric_inflow &lt;- gibraltar_total_bathymetric %&gt;% 
   mutate(cumulative_sed_inflow_m3 = case_when(
     year &lt;= 1944 ~ sed_inflow_m3,
@@ -83,7 +89,7 @@ gibraltar_total_bathymetric</code></pre>
 cumulative_bathymetric_inflow &lt;- cumulative_bathymetric_inflow %&gt;% 
   mutate(cumulative_sed_inflow_af = cumulative_sed_inflow_m3/1233)
 
-gibraltar_vol_graph_report &lt;- ggplot(cumulative_bathymetric_inflow) +
+gibraltar_vol_graph &lt;- ggplot(cumulative_bathymetric_inflow) +
   # geom_bar(stat=&quot;identity&quot;, width = 1)+
   geom_area(aes(x = year, y = cumulative_sed_inflow_af), color = &quot;burlywood4&quot;, fill = &quot;burlywood4&quot;, alpha = 0.6) +
   labs(x = &quot;Year&quot;, 
@@ -104,5 +110,6 @@ gibraltar_vol_graph_report &lt;- ggplot(cumulative_bathymetric_inflow) +
         panel.grid.minor = element_blank()) 
   
 
-gibraltar_vol_graph_report</code></pre>
+gibraltar_vol_graph</code></pre>
 <p><img src="/blog/project2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>

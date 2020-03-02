@@ -1,7 +1,7 @@
 ---
-banner: img/banners/banner-1.jpg
+banner: img/banners/symountains.jpg
 title: "Gibraltar Reservoir Capacity"
-author: "Jessica Jagdeo and Lydia Bleifuss"
+author: "Jessica Jagdeo, Lydia Bleifuss, Camila Bobroff"
 date: "10/30/2019"
 output: html_document
 categories: ["R"]
@@ -14,9 +14,10 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE)
 ```
 
-```{r}
+Construction of Gibraltar Reservoir finished in 1920. The capacity of the reservoir was supposed to be slightly over 20,000 acre-feet, but sedimentation had already reduced the water storage capacity of the reservoir to about 15,000 acre-feet. Since 1920, Gibraltar has faced issues from sedimentation. In 1949, the City of Santa Barbara had to raise Gibraltar Dam due to the amount of sediment accumulating within its confines. Raising the dam maintained the water storage capacity of about 15,000 acre-feet. This project visualizes annual water storage and total water storage capacity of Gibraltar Reservoir. 
 
-# Load in necessary packages
+#### 1. Load in necessary packages
+```{r}
 
 library(tidyverse)
 library(readxl)
@@ -30,9 +31,8 @@ library(here)
 
 ```
 
+#### 2. Load in the data and clean
 ```{r}
-
-# Load in the data and clean
 
 gibraltar_storage <- read_excel("RAW_Gibraltar_Storage_Elevation_2001_2019.xls") %>% 
   rename("date" = "36892", "capacity" = "3182", "total_capacity" = "7500") %>%
@@ -40,7 +40,7 @@ gibraltar_storage <- read_excel("RAW_Gibraltar_Storage_Elevation_2001_2019.xls")
 
 ```
 
-Water storage in Gibraltar Reservoir
+## Water storage in Gibraltar Reservoir
 
 ```{r}
 
@@ -85,7 +85,7 @@ gibraltar_total_bathymetric$year = as.numeric(gibraltar_total_bathymetric$year)
 #note that for 1920 and 1944, the total original capacity should be 14500 and not 14800 
 ```
 
-Sedimentation in Gibraltar Reservoir
+## Sedimentation in Gibraltar Reservoir
 
 ```{r}
 
@@ -97,7 +97,7 @@ cumulative_bathymetric_inflow <- gibraltar_total_bathymetric %>%
 cumulative_bathymetric_inflow <- cumulative_bathymetric_inflow %>% 
   mutate(cumulative_sed_inflow_af = cumulative_sed_inflow_m3/1233)
 
-gibraltar_vol_graph_report <- ggplot(cumulative_bathymetric_inflow) +
+gibraltar_vol_graph <- ggplot(cumulative_bathymetric_inflow) +
   # geom_bar(stat="identity", width = 1)+
   geom_area(aes(x = year, y = cumulative_sed_inflow_af), color = "burlywood4", fill = "burlywood4", alpha = 0.6) +
   labs(x = "Year", 
@@ -118,7 +118,7 @@ gibraltar_vol_graph_report <- ggplot(cumulative_bathymetric_inflow) +
         panel.grid.minor = element_blank()) 
   
 
-gibraltar_vol_graph_report
+gibraltar_vol_graph
 
 ```
 

@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <title>Examining Runoff Ratio in Santa Cruz Creek Sub-basin</title>
-  <meta name="author" content="Jessica Jagdeo" />
+  <meta name="author" content="Jessica Jagdeo &amp; Lydia Bleifuss" />
   
   
   
@@ -70,13 +70,13 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="/blog/1/01/01/project4/" />
   <meta property="og:description" content="Site template made by devcows using hugo">
-  <meta property="og:image" content="/img/banners/banner-1.jpg">
+  <meta property="og:image" content="/img/banners/beach.jpg">
   <meta property="og:image:type" content="image/jpg">
   
   
   
-    <meta property="og:image:width" content="1000">
-    <meta property="og:image:height" content="750">
+    <meta property="og:image:width" content="960">
+    <meta property="og:image:height" content="720">
   
   
   
@@ -99,7 +99,7 @@
   <meta name="twitter:site" content="@GoHugoIO">
   <meta name="twitter:title" content="Examining Runoff Ratio in Santa Cruz Creek Sub-basin">
   
-  <meta name="twitter:image" content="/img/banners/banner-1.jpg">
+  <meta name="twitter:image" content="/img/banners/beach.jpg">
   
   <meta name="twitter:description" content="Site template made by devcows using hugo">
   
@@ -121,7 +121,7 @@
             <div class="navbar-header">
                 <a class="navbar-brand home" href="/">
                     <img src="/img/logo.png" alt="Examining Runoff Ratio in Santa Cruz Creek Sub-basin logo" class="hidden-xs hidden-sm">
-                    <img src="/img/logo-small.png" alt="Examining Runoff Ratio in Santa Cruz Creek Sub-basin logo" class="visible-xs visible-sm">
+                    <img src="/" alt="Examining Runoff Ratio in Santa Cruz Creek Sub-basin logo" class="visible-xs visible-sm">
                     <span class="sr-only">Examining Runoff Ratio in Santa Cruz Creek Sub-basin - go to homepage</span>
                 </a>
                 <div class="navbar-buttons">
@@ -147,7 +147,7 @@
                   
                   <li class="dropdown active">
                     
-                    <a href="/blog/">Blog</a>
+                    <a href="/blog/">Projects</a>
                     
                   </li>
                   
@@ -211,7 +211,7 @@
 
                         
                           <p class="text-muted text-uppercase mb-small text-right">
-                            By <a href="#">Jessica Jagdeo</a>
+                            By <a href="#">Jessica Jagdeo &amp; Lydia Bleifuss</a>
                             
                             
                           </p>
@@ -221,6 +221,9 @@
                           
 
 
+<p>To understand the hydrological processes specific to a particular watershed, it is important to understand how much runoff is generated within the area. The runoff ratio for a particular watershed can be calculated if there are good records of precipitation and discharge within the watershed. In the Santa Ynez Watershed, Santa Barbara County maintains a record of precipitation at Lake Cachuma and the US Geological Survey records discharge at the Santa Cruz sub-basin, which is near Lake Cachuma. Using these data sets, the runoff ratio for the Santa Cruz sub-basin was calculated from 1983 to 2018 for the rainy season.</p>
+<div id="load-necessary-packages." class="section level4">
+<h4>1. Load necessary packages.</h4>
 <pre class="r"><code>library(tidyverse)
 library(readxl)
 library(lubridate)
@@ -231,7 +234,10 @@ library(magrittr)
 library(gghighlight)
 library(tsibble)
 library(paletteer)</code></pre>
-<p><em>Santa Cruz Gauge Observed Flow</em></p>
+</div>
+<div id="load-in-the-data-and-clean" class="section level4">
+<h4>2. Load in the data and clean</h4>
+<p>Santa Cruz Gauge Observed Flow (US Geological Survey)</p>
 <pre class="r"><code># Read in SC observed flow data
 
 sc_usgs_flow &lt;- read_csv(&quot;sc_creek_clean.csv&quot;)
@@ -247,7 +253,9 @@ sc_usgs_flow$date &lt;- as.Date(sc_usgs_flow$date, &quot;%m/%d/%Y&quot;)
 sc_flow_cumecs &lt;- sc_usgs_flow %&gt;% 
   mutate(dis_cumecs = (dis_cfs*0.03)) %&gt;% 
   select(date, dis_cumecs)</code></pre>
-<p><em>Surface runoff calculation</em></p>
+</div>
+<div id="surface-runoff-calculation" class="section level4">
+<h4>3. Surface runoff calculation</h4>
 <p>Divide aggregated monthly discharge by area (km) to obtain to meters of runoff.
 Compare this runoff to rainfall (mm) per month for subbasin 4.
 Try it for early and late months and high rainfall years and low rainfall years.</p>
@@ -262,7 +270,9 @@ runoff_calc &lt;- sc_flow_cumecs %&gt;%
   summarize(
     monthly_runoff_mmd = sum(runoff_mmd)
   ) </code></pre>
-<p><em>Subbasin 4 Precipitation Data (Cachuma Station)</em></p>
+</div>
+<div id="subbasin-4-precipitation-data-santa-barbara-county-cachuma-station" class="section level4">
+<h4>4. Subbasin 4 Precipitation Data (Santa Barbara County Cachuma Station)</h4>
 <pre class="r"><code>cachuma_precip &lt;- read_xls(&quot;RAW_332dailys_SBcounty.xls&quot;) %&gt;%
   tail(-8) %&gt;% 
   row_to_names(row_number = 1) %&gt;% 
@@ -281,42 +291,18 @@ cachuma_precip_calc &lt;- cachuma_precip %&gt;%
   summarize(
     monthly_precip_mm = sum(daily_rain_mm)
   )</code></pre>
-<p>Combine monthly runoff and precip into one dataframe (insert 0s for months without rain)</p>
+</div>
+<div id="combine-monthly-runoff-and-precip-into-one-dataframe-insert-0s-for-months-without-rain" class="section level4">
+<h4>5. Combine monthly runoff and precip into one dataframe (insert 0s for months without rain)</h4>
 <pre class="r"><code>monthly_precip_runoff &lt;- merge(cachuma_precip_calc, runoff_calc) %&gt;% 
   mutate(runoff_precip_ratio = monthly_runoff_mmd/monthly_precip_mm)
 
 monthly_precip_runoff$date &lt;- as.yearmon(paste(monthly_precip_runoff$year, monthly_precip_runoff$month), &quot;%Y %m&quot;)
 
 monthly_precip_runoff$date &lt;- as.Date(monthly_precip_runoff$date)</code></pre>
-<p>Graph it</p>
-<pre class="r"><code>monthly_ratio &lt;- ggplot(monthly_precip_runoff, aes(x = date, y = runoff_precip_ratio)) +
-  geom_point() +
-  geom_line() +
-  theme_minimal() +
-  labs(x = &quot;Year&quot;,
-       y = &quot;Runoff/Precipitation Ratio&quot;) +
-  ggtitle(&quot;Runoff &amp; Precipitation Ratio for Santa Ynez Watershed&quot;) +
-  scale_y_continuous(limits = c(0,1)) +
-  scale_x_date(date_breaks = &quot;12 month&quot;, date_labels = &quot;%b %Y&quot;) +
-  theme(axis.text.x=element_text(angle=60, hjust=1))
-
-monthly_ratio</code></pre>
-<p><img src="/blog/project4_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-<p>Seasonality graph for all months:</p>
-<pre class="r"><code>seasonal_runoff_plot &lt;- ggplot(monthly_precip_runoff, aes(x = date, y = runoff_precip_ratio)) +
-  geom_line(aes(color = month)) +
-  theme_minimal() +
-  scale_color_paletteer_d(&quot;rcartocolor::Bold&quot;) +
-  scale_y_continuous(limits = c(0,1)) +
-  scale_x_date(date_breaks = &quot;5 year&quot;, date_labels = &quot;%Y&quot;) +
-  labs(x = &quot;Year&quot;,
-       y = &quot;Runoff Ratio&quot;) +
-  ggtitle(&quot;Santa Ynez Watershed Seasonal Runoff Ratio \n1983 - 2018&quot;)
-
-seasonal_runoff_plot</code></pre>
-<p><img src="/blog/project4_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<pre class="r"><code># Takeaway: runoff ratio is highly variable in the watershed, even taking into consideration seasonality </code></pre>
-<p>Seasonality graph for selected months (rainy season):</p>
+</div>
+<div id="graph-the-runoff-ratio-for-the-santa-cruz-sub-basin-during-rainy-months-from-1983-to-2018" class="section level4">
+<h4>6. Graph the runoff ratio for the Santa Cruz sub-basin during rainy months from 1983 to 2018</h4>
 <pre class="r"><code>selected_seasons_plot &lt;- monthly_precip_runoff %&gt;% 
   filter(month == &quot;01&quot;|
            month == &quot;02&quot;|
@@ -337,7 +323,8 @@ seasonal_runoff_plot</code></pre>
   theme(plot.title = element_text(hjust = 0.5, size = 12))
 
 selected_seasons_plot</code></pre>
-<p><img src="/blog/project4_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="/blog/project4_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
 
                         </div>
                         
@@ -546,54 +533,7 @@ selected_seasons_plot</code></pre>
 
         <div class="col-md-4 col-sm-6">
 
-             
-            <h4>Recent posts</h4>
-
-            <div class="blog-entries">
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
-                        <a href="/blog/1/01/01/project3/">
-                          
-                            <img src="/img/banners/banner-1.jpg" class="img-responsive" alt="Assessment of Santa Ynez River Water Quality">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="/blog/1/01/01/project3/">Assessment of Santa Ynez River Water Quality</a></h5>
-                    </div>
-                </div>
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
-                        <a href="/blog/1/01/01/project1/">
-                          
-                            <img src="/img/banners/banner-1.jpg" class="img-responsive" alt="Bonanza Creek Snowshow Hare Examination">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="/blog/1/01/01/project1/">Bonanza Creek Snowshow Hare Examination</a></h5>
-                    </div>
-                </div>
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
-                        <a href="/blog/1/01/01/project4/">
-                          
-                            <img src="/img/banners/banner-1.jpg" class="img-responsive" alt="Examining Runoff Ratio in Santa Cruz Creek Sub-basin">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="/blog/1/01/01/project4/">Examining Runoff Ratio in Santa Cruz Creek Sub-basin</a></h5>
-                    </div>
-                </div>
-                
-            </div>
-
-            <hr class="hidden-md hidden-lg">
-             
+              
 
         </div>
         

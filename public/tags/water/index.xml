@@ -16,8 +16,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/blog/1/01/01/project2/</guid>
-      <description># Load in necessary packageslibrary(tidyverse)library(readxl)library(janitor)library(lubridate)library(gghighlight)library(kableExtra)library(ggplot2)library(ggthemes)library(here)# Load in the data and cleangibraltar_storage &amp;lt;- read_excel(&amp;quot;RAW_Gibraltar_Storage_Elevation_2001_2019.xls&amp;quot;) %&amp;gt;% rename(&amp;quot;date&amp;quot; = &amp;quot;36892&amp;quot;, &amp;quot;capacity&amp;quot; = &amp;quot;3182&amp;quot;, &amp;quot;total_capacity&amp;quot; = &amp;quot;7500&amp;quot;) %&amp;gt;%mutate(capacity_m3 = (capacity*1233.48))Water storage in Gibraltar Reservoir
-gibraltar_cap_plot &amp;lt;- ggplot(gibraltar_storage, aes(x = date, y = capacity)) +geom_area(color = &amp;quot;darkblue&amp;quot;, fill = &amp;quot;darkblue&amp;quot;) + # creates area rather than barstheme_classic() +labs(x = &amp;quot;Year&amp;quot;, y = &amp;quot;Water (acre-feet)&amp;quot;) +ggtitle(&amp;quot;Gibraltar Water Stored (2001 - 2018)\n&amp;quot;) +theme(plot.</description>
+      <description>Construction of Gibraltar Reservoir finished in 1920. The capacity of the reservoir was supposed to be slightly over 20,000 acre-feet, but sedimentation had already reduced the water storage capacity of the reservoir to about 15,000 acre-feet. Since 1920, Gibraltar has faced issues from sedimentation. In 1949, the City of Santa Barbara had to raise Gibraltar Dam due to the amount of sediment accumulating within its confines. Raising the dam maintained the water storage capacity of about 15,000 acre-feet.</description>
     </item>
     
   </channel>

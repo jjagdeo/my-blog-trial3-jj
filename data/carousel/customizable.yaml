@@ -1,8 +1,7 @@
 weight: 4
-title: "Easy to customize"
+title: "Resume"
 description: >
   <ul class="list-style-none">
-    <li>7 preprepared colour variations.</li>
-    <li>Easily to change fonts</li>
+    <li>Put a link to resume here.</li>
   </ul>
-image: "img/carousel/template-easy-code.png"
+#image: "img/carousel/headshot_resized.png"

@@ -1,5 +1,5 @@
 ---
-banner: img/banners/banner-1.jpg
+banner: img/banners/moremesa.jpg
 title: "Assessment of Santa Ynez River Water Quality"
 author: "Jessica Jagdeo"
 date: "11/24/2019"
@@ -14,7 +14,11 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE)
 ```
 
-```{r, include = FALSE}
+The quality of water within a watershed affects people who rely on surficial water for drinking, as well as the local wildlife. The Santa Ynez River flows into the Gibraltar Reservoir and Lake Cachuma and water is diverted from these reservoirs to nearby cities. The Santa Ynez Watershed supplies water to residents within the City of Santa Barbara, Goleta, Montecito, and other towns. Since 1998, water quality measurements have been taken along the Santa Ynez River. This project visualizes the turbidity and amount of total dissolved solids and total suspended solids recorded by water samples. 
+
+#### 1. Load necessary packages.
+
+```{r}
 
 library(tidyverse)
 library(readxl)
@@ -27,8 +31,11 @@ library(scales)
 
 ```
 
+
+#### 2. Load in the data and clean
+
 Santa Ynez Water Quality Historical Data
-Data only goes back to 1998
+Data Source: 
 Turbidity units: NTU
 TSS and TDS units: mg/L
 ```{r}
@@ -48,6 +55,8 @@ santa_ynez_water_quality$date <- as.yearmon(paste(santa_ynez_water_quality$year,
 
 ```
 
+
+#### 3. Graph turbidity, total suspended solids, and total dissolved solids samples
 ```{r}
 
 santa_ynez_historical_quality <- santa_ynez_water_quality %>% 
@@ -55,9 +64,11 @@ santa_ynez_historical_quality <- santa_ynez_water_quality %>%
   geom_point(color = "darkgreen") +
   facet_wrap(~CharacteristicName, scales = "free") +
   theme_classic() +
-  xlab("\nDate") +
+  xlab("\nYear") +
   ylab("Sampling Result\n") +
-  ggtitle("Santa Ynez Watershed Turbidity, Total Suspended Solids, & Total Dissolved Solids\nMonthly 1998 - 2018")
+  ggtitle("Santa Ynez Watershed Turbidity, Total Suspended Solids, & Total Dissolved Solids\nMonthly 1998 - 2018") +
+  theme(plot.title = element_text(hjust=0.5)) +
+  theme(plot.title = element_text(size=12))
   
   santa_ynez_historical_quality
 

@@ -1,7 +1,7 @@
 ---
-banner: img/banners/banner-1.jpg
+banner: img/banners/beach.jpg
 title: "Examining Runoff Ratio in Santa Cruz Creek Sub-basin"
-author: "Jessica Jagdeo"
+author: "Jessica Jagdeo & Lydia Bleifuss"
 date: "1/13/2020"
 output: html_document
 categories: ["R"]
@@ -14,7 +14,9 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE)
 ```
 
+To understand the hydrological processes specific to a particular watershed, it is important to understand how much runoff is generated within the area. The runoff ratio for a particular watershed can be calculated if there are good records of precipitation and discharge within the watershed. In the Santa Ynez Watershed, Santa Barbara County maintains a record of precipitation at Lake Cachuma and the US Geological Survey records discharge at the Santa Cruz sub-basin, which is near Lake Cachuma. Using these data sets, the runoff ratio for the Santa Cruz sub-basin was calculated from 1983 to 2018 for the rainy season. 
 
+#### 1. Load necessary packages.
 ```{r}
 
 library(tidyverse)
@@ -29,7 +31,9 @@ library(tsibble)
 library(paletteer)
 ```
 
-*Santa Cruz Gauge Observed Flow*
+#### 2. Load in the data and clean
+
+Santa Cruz Gauge Observed Flow (US Geological Survey)
 ```{r}
 
 # Read in SC observed flow data
@@ -50,7 +54,7 @@ sc_flow_cumecs <- sc_usgs_flow %>%
 
 ```
 
-*Surface runoff calculation*
+#### 3. Surface runoff calculation
 
 Divide aggregated monthly discharge by area (km) to obtain to meters of runoff. 
 Compare this runoff to rainfall (mm) per month for subbasin 4.
@@ -73,7 +77,7 @@ runoff_calc <- sc_flow_cumecs %>%
 
 ```
 
-*Subbasin 4 Precipitation Data (Cachuma Station)*
+#### 4. Subbasin 4 Precipitation Data (Santa Barbara County Cachuma Station)
 ```{r}
 
 cachuma_precip <- read_xls("RAW_332dailys_SBcounty.xls") %>%
@@ -97,7 +101,7 @@ cachuma_precip_calc <- cachuma_precip %>%
          
 ```
 
-Combine monthly runoff and precip into one dataframe (insert 0s for months without rain)
+#### 5. Combine monthly runoff and precip into one dataframe (insert 0s for months without rain)
 ```{r}
 
 monthly_precip_runoff <- merge(cachuma_precip_calc, runoff_calc) %>% 
@@ -110,44 +114,7 @@ monthly_precip_runoff$date <- as.Date(monthly_precip_runoff$date)
 
 ```
 
-Graph it
-```{r}
-
-monthly_ratio <- ggplot(monthly_precip_runoff, aes(x = date, y = runoff_precip_ratio)) +
-  geom_point() +
-  geom_line() +
-  theme_minimal() +
-  labs(x = "Year",
-       y = "Runoff/Precipitation Ratio") +
-  ggtitle("Runoff & Precipitation Ratio for Santa Ynez Watershed") +
-  scale_y_continuous(limits = c(0,1)) +
-  scale_x_date(date_breaks = "12 month", date_labels = "%b %Y") +
-  theme(axis.text.x=element_text(angle=60, hjust=1))
-
-monthly_ratio
-
-```
-
-Seasonality graph for all months:
-```{r}
-
-seasonal_runoff_plot <- ggplot(monthly_precip_runoff, aes(x = date, y = runoff_precip_ratio)) +
-  geom_line(aes(color = month)) +
-  theme_minimal() +
-  scale_color_paletteer_d("rcartocolor::Bold") +
-  scale_y_continuous(limits = c(0,1)) +
-  scale_x_date(date_breaks = "5 year", date_labels = "%Y") +
-  labs(x = "Year",
-       y = "Runoff Ratio") +
-  ggtitle("Santa Ynez Watershed Seasonal Runoff Ratio \n1983 - 2018")
-
-seasonal_runoff_plot
-
-# Takeaway: runoff ratio is highly variable in the watershed, even taking into consideration seasonality 
-
-```
-
-Seasonality graph for selected months (rainy season): 
+#### 6. Graph the runoff ratio for the Santa Cruz sub-basin during rainy months from 1983 to 2018
 ```{r}
 
 selected_seasons_plot <- monthly_precip_runoff %>% 

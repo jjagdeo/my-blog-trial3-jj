@@ -24,7 +24,7 @@ paginate = 10
 
 [[menu.main]]
     identifier="blog"
-    name = "Blog"
+    name = "Projects"
     url  = "/blog/"
     weight = 2
 
@@ -76,7 +76,7 @@ paginate = 10
     # Social media
     facebook_site = "" # the Facebook handle of your site ('https://www.facebook.com/HANDLE')
     twitter_site = "GoHugoIO" # the Twitter handle of your site (without the '@')
-    default_sharing_image = "img/sharing-default.png"
+    default_sharing_image = "img/image3.JPG"
 
     # Google Maps API key (if not set will default to not passing a key.)
     googleMapsApiKey = "AIzaSyCFhtWLJcE30xOAjcbSFi-0fnoVmQZPb1Y"
@@ -107,7 +107,7 @@ paginate = 10
     date_format = "January 2, 2006"
 
     logo = "img/logo.png"
-    logo_small = "img/logo-small.png"
+    #logo_small = "img/logo-small.png"
     #address = """<p class="text-uppercase"><strong>ESM 244</strong>
         #<br>Bren Hall
         #<br>UC Santa Barbara
@@ -156,7 +156,7 @@ paginate = 10
     # at 'exampleSite/data/testimonials'.
     # For more informtion take a look at the README.
     title = "Projects"
-    subtitle = "Insert information about class projects here."
+    #subtitle = "Insert information about class projects here."
 
 [params.see_more]
     #enable = true
@@ -175,6 +175,6 @@ paginate = 10
     #subtitle = ""
 
 [params.recent_posts]
-    enable = true
-    title = "From my blog"
-    subtitle = "This section highlights recent posts."
+    #enable = true
+    #title = "Project highlights"
+    #subtitle = "This section highlights recent projects."

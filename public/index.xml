@@ -62,8 +62,7 @@ We&#39;ll start with creating a new site with a very basic template.</descriptio
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/blog/1/01/01/project3/</guid>
-      <description>Santa Ynez Water Quality Historical DataData only goes back to 1998Turbidity units: NTUTSS and TDS units: mg/L
-santa_ynez_water_quality_raw &amp;lt;- read_csv(&amp;quot;RAW_santa_ynez_water_quality.csv&amp;quot;)santa_ynez_water_quality &amp;lt;- santa_ynez_water_quality_raw %&amp;gt;% select(OrganizationFormalName, ActivityStartDate, MonitoringLocationIdentifier, CharacteristicName, ResultSampleFractionText, ResultMeasureValue, &amp;quot;ResultMeasure/MeasureUnitCode&amp;quot;) %&amp;gt;% # Selecting only relevant columns filter(CharacteristicName == &amp;quot;Total dissolved solids&amp;quot;|CharacteristicName == &amp;quot;Turbidity&amp;quot; |CharacteristicName == &amp;quot;Total suspended solids&amp;quot;) %&amp;gt;% separate(ActivityStartDate, sep = &amp;quot;-&amp;quot;, into = c(&amp;quot;year&amp;quot;, &amp;quot;month&amp;quot;, &amp;quot;day&amp;quot;)) %&amp;gt;% group_by(year, month, CharacteristicName) %&amp;gt;% summarize(value = sum(ResultMeasureValue)) santa_ynez_water_quality$date &amp;lt;- as.</description>
+      <description>The quality of water within a watershed affects people who rely on surficial water for drinking, as well as the local wildlife. The Santa Ynez River flows into the Gibraltar Reservoir and Lake Cachuma and water is diverted from these reservoirs to nearby cities. The Santa Ynez Watershed supplies water to residents within the City of Santa Barbara, Goleta, Montecito, and other towns. Since 1998, water quality measurements have been taken along the Santa Ynez River.</description>
     </item>
     
     <item>
@@ -91,9 +90,7 @@ Please feel free to contact us, our customer service center is working for you 2
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/blog/1/01/01/project4/</guid>
-      <description>library(tidyverse)library(readxl)library(lubridate)library(janitor)library(ggthemes)library(zoo)library(magrittr)library(gghighlight)library(tsibble)library(paletteer)Santa Cruz Gauge Observed Flow
-# Read in SC observed flow datasc_usgs_flow &amp;lt;- read_csv(&amp;quot;sc_creek_clean.csv&amp;quot;)sc_usgs_flow$dis_cfs &amp;lt;- as.numeric(as.character(sc_usgs_flow$dis_cfs))# Convert date from character to datesc_usgs_flow$date &amp;lt;- as.Date(sc_usgs_flow$date, &amp;quot;%m/%d/%Y&amp;quot;)# Create column for daily inflow in cumecs (cfs to cubic meters per second (cumecs)) sc_flow_cumecs &amp;lt;- sc_usgs_flow %&amp;gt;% mutate(dis_cumecs = (dis_cfs*0.03)) %&amp;gt;% select(date, dis_cumecs)Surface runoff calculation
-Divide aggregated monthly discharge by area (km) to obtain to meters of runoff.</description>
+      <description>To understand the hydrological processes specific to a particular watershed, it is important to understand how much runoff is generated within the area. The runoff ratio for a particular watershed can be calculated if there are good records of precipitation and discharge within the watershed. In the Santa Ynez Watershed, Santa Barbara County maintains a record of precipitation at Lake Cachuma and the US Geological Survey records discharge at the Santa Cruz sub-basin, which is near Lake Cachuma.</description>
     </item>
     
     <item>
@@ -112,8 +109,7 @@ Divide aggregated monthly discharge by area (km) to obtain to meters of runoff.<
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/blog/1/01/01/project2/</guid>
-      <description># Load in necessary packageslibrary(tidyverse)library(readxl)library(janitor)library(lubridate)library(gghighlight)library(kableExtra)library(ggplot2)library(ggthemes)library(here)# Load in the data and cleangibraltar_storage &amp;lt;- read_excel(&amp;quot;RAW_Gibraltar_Storage_Elevation_2001_2019.xls&amp;quot;) %&amp;gt;% rename(&amp;quot;date&amp;quot; = &amp;quot;36892&amp;quot;, &amp;quot;capacity&amp;quot; = &amp;quot;3182&amp;quot;, &amp;quot;total_capacity&amp;quot; = &amp;quot;7500&amp;quot;) %&amp;gt;%mutate(capacity_m3 = (capacity*1233.48))Water storage in Gibraltar Reservoir
-gibraltar_cap_plot &amp;lt;- ggplot(gibraltar_storage, aes(x = date, y = capacity)) +geom_area(color = &amp;quot;darkblue&amp;quot;, fill = &amp;quot;darkblue&amp;quot;) + # creates area rather than barstheme_classic() +labs(x = &amp;quot;Year&amp;quot;, y = &amp;quot;Water (acre-feet)&amp;quot;) +ggtitle(&amp;quot;Gibraltar Water Stored (2001 - 2018)\n&amp;quot;) +theme(plot.</description>
+      <description>Construction of Gibraltar Reservoir finished in 1920. The capacity of the reservoir was supposed to be slightly over 20,000 acre-feet, but sedimentation had already reduced the water storage capacity of the reservoir to about 15,000 acre-feet. Since 1920, Gibraltar has faced issues from sedimentation. In 1949, the City of Santa Barbara had to raise Gibraltar Dam due to the amount of sediment accumulating within its confines. Raising the dam maintained the water storage capacity of about 15,000 acre-feet.</description>
     </item>
     
     <item>

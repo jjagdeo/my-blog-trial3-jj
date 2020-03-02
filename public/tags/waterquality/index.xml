@@ -16,8 +16,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/blog/1/01/01/project3/</guid>
-      <description>Santa Ynez Water Quality Historical DataData only goes back to 1998Turbidity units: NTUTSS and TDS units: mg/L
-santa_ynez_water_quality_raw &amp;lt;- read_csv(&amp;quot;RAW_santa_ynez_water_quality.csv&amp;quot;)santa_ynez_water_quality &amp;lt;- santa_ynez_water_quality_raw %&amp;gt;% select(OrganizationFormalName, ActivityStartDate, MonitoringLocationIdentifier, CharacteristicName, ResultSampleFractionText, ResultMeasureValue, &amp;quot;ResultMeasure/MeasureUnitCode&amp;quot;) %&amp;gt;% # Selecting only relevant columns filter(CharacteristicName == &amp;quot;Total dissolved solids&amp;quot;|CharacteristicName == &amp;quot;Turbidity&amp;quot; |CharacteristicName == &amp;quot;Total suspended solids&amp;quot;) %&amp;gt;% separate(ActivityStartDate, sep = &amp;quot;-&amp;quot;, into = c(&amp;quot;year&amp;quot;, &amp;quot;month&amp;quot;, &amp;quot;day&amp;quot;)) %&amp;gt;% group_by(year, month, CharacteristicName) %&amp;gt;% summarize(value = sum(ResultMeasureValue)) santa_ynez_water_quality$date &amp;lt;- as.</description>
+      <description>The quality of water within a watershed affects people who rely on surficial water for drinking, as well as the local wildlife. The Santa Ynez River flows into the Gibraltar Reservoir and Lake Cachuma and water is diverted from these reservoirs to nearby cities. The Santa Ynez Watershed supplies water to residents within the City of Santa Barbara, Goleta, Montecito, and other towns. Since 1998, water quality measurements have been taken along the Santa Ynez River.</description>
     </item>
     
   </channel>

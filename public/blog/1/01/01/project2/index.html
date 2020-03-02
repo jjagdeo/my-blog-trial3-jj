@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <title>Gibraltar Reservoir Capacity</title>
-  <meta name="author" content="Jessica Jagdeo and Lydia Bleifuss" />
+  <meta name="author" content="Jessica Jagdeo, Lydia Bleifuss, Camila Bobroff" />
   
   
   
@@ -70,13 +70,13 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="/blog/1/01/01/project2/" />
   <meta property="og:description" content="Site template made by devcows using hugo">
-  <meta property="og:image" content="/img/banners/banner-1.jpg">
+  <meta property="og:image" content="/img/banners/symountains.jpg">
   <meta property="og:image:type" content="image/jpg">
   
   
   
-    <meta property="og:image:width" content="1000">
-    <meta property="og:image:height" content="750">
+    <meta property="og:image:width" content="960">
+    <meta property="og:image:height" content="720">
   
   
   
@@ -99,7 +99,7 @@
   <meta name="twitter:site" content="@GoHugoIO">
   <meta name="twitter:title" content="Gibraltar Reservoir Capacity">
   
-  <meta name="twitter:image" content="/img/banners/banner-1.jpg">
+  <meta name="twitter:image" content="/img/banners/symountains.jpg">
   
   <meta name="twitter:description" content="Site template made by devcows using hugo">
   
@@ -121,7 +121,7 @@
             <div class="navbar-header">
                 <a class="navbar-brand home" href="/">
                     <img src="/img/logo.png" alt="Gibraltar Reservoir Capacity logo" class="hidden-xs hidden-sm">
-                    <img src="/img/logo-small.png" alt="Gibraltar Reservoir Capacity logo" class="visible-xs visible-sm">
+                    <img src="/" alt="Gibraltar Reservoir Capacity logo" class="visible-xs visible-sm">
                     <span class="sr-only">Gibraltar Reservoir Capacity - go to homepage</span>
                 </a>
                 <div class="navbar-buttons">
@@ -147,7 +147,7 @@
                   
                   <li class="dropdown active">
                     
-                    <a href="/blog/">Blog</a>
+                    <a href="/blog/">Projects</a>
                     
                   </li>
                   
@@ -211,7 +211,7 @@
 
                         
                           <p class="text-muted text-uppercase mb-small text-right">
-                            By <a href="#">Jessica Jagdeo and Lydia Bleifuss</a>
+                            By <a href="#">Jessica Jagdeo, Lydia Bleifuss, Camila Bobroff</a>
                             
                             
                           </p>
@@ -221,9 +221,10 @@
                           
 
 
-<pre class="r"><code># Load in necessary packages
-
-library(tidyverse)
+<p>Construction of Gibraltar Reservoir finished in 1920. The capacity of the reservoir was supposed to be slightly over 20,000 acre-feet, but sedimentation had already reduced the water storage capacity of the reservoir to about 15,000 acre-feet. Since 1920, Gibraltar has faced issues from sedimentation. In 1949, the City of Santa Barbara had to raise Gibraltar Dam due to the amount of sediment accumulating within its confines. Raising the dam maintained the water storage capacity of about 15,000 acre-feet. This project visualizes annual water storage and total water storage capacity of Gibraltar Reservoir.</p>
+<div id="load-in-necessary-packages" class="section level4">
+<h4>1. Load in necessary packages</h4>
+<pre class="r"><code>library(tidyverse)
 library(readxl)
 library(janitor)
 library(lubridate)
@@ -232,12 +233,15 @@ library(kableExtra)
 library(ggplot2)
 library(ggthemes)
 library(here)</code></pre>
-<pre class="r"><code># Load in the data and clean
-
-gibraltar_storage &lt;- read_excel(&quot;RAW_Gibraltar_Storage_Elevation_2001_2019.xls&quot;) %&gt;% 
+</div>
+<div id="load-in-the-data-and-clean" class="section level4">
+<h4>2. Load in the data and clean</h4>
+<pre class="r"><code>gibraltar_storage &lt;- read_excel(&quot;RAW_Gibraltar_Storage_Elevation_2001_2019.xls&quot;) %&gt;% 
   rename(&quot;date&quot; = &quot;36892&quot;, &quot;capacity&quot; = &quot;3182&quot;, &quot;total_capacity&quot; = &quot;7500&quot;) %&gt;%
   mutate(capacity_m3 = (capacity*1233.48))</code></pre>
-<p>Water storage in Gibraltar Reservoir</p>
+</div>
+<div id="water-storage-in-gibraltar-reservoir" class="section level2">
+<h2>Water storage in Gibraltar Reservoir</h2>
 <pre class="r"><code>gibraltar_cap_plot &lt;- ggplot(gibraltar_storage, aes(x = date, y = capacity)) +
   geom_area(color = &quot;darkblue&quot;, fill = &quot;darkblue&quot;) + # creates area rather than bars
   theme_classic() +
@@ -285,7 +289,9 @@ gibraltar_total_bathymetric</code></pre>
 <pre class="r"><code>gibraltar_total_bathymetric$year = as.numeric(gibraltar_total_bathymetric$year)
 
 #note that for 1920 and 1944, the total original capacity should be 14500 and not 14800 </code></pre>
-<p>Sedimentation in Gibraltar Reservoir</p>
+</div>
+<div id="sedimentation-in-gibraltar-reservoir" class="section level2">
+<h2>Sedimentation in Gibraltar Reservoir</h2>
 <pre class="r"><code>cumulative_bathymetric_inflow &lt;- gibraltar_total_bathymetric %&gt;% 
   mutate(cumulative_sed_inflow_m3 = case_when(
     year &lt;= 1944 ~ sed_inflow_m3,
@@ -294,7 +300,7 @@ gibraltar_total_bathymetric</code></pre>
 cumulative_bathymetric_inflow &lt;- cumulative_bathymetric_inflow %&gt;% 
   mutate(cumulative_sed_inflow_af = cumulative_sed_inflow_m3/1233)
 
-gibraltar_vol_graph_report &lt;- ggplot(cumulative_bathymetric_inflow) +
+gibraltar_vol_graph &lt;- ggplot(cumulative_bathymetric_inflow) +
   # geom_bar(stat=&quot;identity&quot;, width = 1)+
   geom_area(aes(x = year, y = cumulative_sed_inflow_af), color = &quot;burlywood4&quot;, fill = &quot;burlywood4&quot;, alpha = 0.6) +
   labs(x = &quot;Year&quot;, 
@@ -315,8 +321,9 @@ gibraltar_vol_graph_report &lt;- ggplot(cumulative_bathymetric_inflow) +
         panel.grid.minor = element_blank()) 
   
 
-gibraltar_vol_graph_report</code></pre>
+gibraltar_vol_graph</code></pre>
 <p><img src="/blog/project2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
 
                         </div>
                         
@@ -525,54 +532,7 @@ gibraltar_vol_graph_report</code></pre>
 
         <div class="col-md-4 col-sm-6">
 
-             
-            <h4>Recent posts</h4>
-
-            <div class="blog-entries">
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
-                        <a href="/blog/1/01/01/project3/">
-                          
-                            <img src="/img/banners/banner-1.jpg" class="img-responsive" alt="Assessment of Santa Ynez River Water Quality">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="/blog/1/01/01/project3/">Assessment of Santa Ynez River Water Quality</a></h5>
-                    </div>
-                </div>
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
-                        <a href="/blog/1/01/01/project1/">
-                          
-                            <img src="/img/banners/banner-1.jpg" class="img-responsive" alt="Bonanza Creek Snowshow Hare Examination">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="/blog/1/01/01/project1/">Bonanza Creek Snowshow Hare Examination</a></h5>
-                    </div>
-                </div>
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
-                        <a href="/blog/1/01/01/project4/">
-                          
-                            <img src="/img/banners/banner-1.jpg" class="img-responsive" alt="Examining Runoff Ratio in Santa Cruz Creek Sub-basin">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="/blog/1/01/01/project4/">Examining Runoff Ratio in Santa Cruz Creek Sub-basin</a></h5>
-                    </div>
-                </div>
-                
-            </div>
-
-            <hr class="hidden-md hidden-lg">
-             
+              
 
         </div>
         

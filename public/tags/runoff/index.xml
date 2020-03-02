@@ -16,9 +16,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/blog/1/01/01/project4/</guid>
-      <description>library(tidyverse)library(readxl)library(lubridate)library(janitor)library(ggthemes)library(zoo)library(magrittr)library(gghighlight)library(tsibble)library(paletteer)Santa Cruz Gauge Observed Flow
-# Read in SC observed flow datasc_usgs_flow &amp;lt;- read_csv(&amp;quot;sc_creek_clean.csv&amp;quot;)sc_usgs_flow$dis_cfs &amp;lt;- as.numeric(as.character(sc_usgs_flow$dis_cfs))# Convert date from character to datesc_usgs_flow$date &amp;lt;- as.Date(sc_usgs_flow$date, &amp;quot;%m/%d/%Y&amp;quot;)# Create column for daily inflow in cumecs (cfs to cubic meters per second (cumecs)) sc_flow_cumecs &amp;lt;- sc_usgs_flow %&amp;gt;% mutate(dis_cumecs = (dis_cfs*0.03)) %&amp;gt;% select(date, dis_cumecs)Surface runoff calculation
-Divide aggregated monthly discharge by area (km) to obtain to meters of runoff.</description>
+      <description>To understand the hydrological processes specific to a particular watershed, it is important to understand how much runoff is generated within the area. The runoff ratio for a particular watershed can be calculated if there are good records of precipitation and discharge within the watershed. In the Santa Ynez Watershed, Santa Barbara County maintains a record of precipitation at Lake Cachuma and the US Geological Survey records discharge at the Santa Cruz sub-basin, which is near Lake Cachuma.</description>
     </item>
     
   </channel>
