@@ -75,16 +75,6 @@ We&#39;ll start with creating a new site with a very basic template.</descriptio
     </item>
     
     <item>
-      <title>Contact</title>
-      <link>/contact/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/contact/</guid>
-      <description>We are here to help you Are you curious about something? Do you have some kind of problem with our products? As am hastily invited settled at limited civilly fortune me. Really spring in extent an by. Judge but built gay party world. Of so am he remember although required. Bachelor unpacked be advanced at. Confined in declared marianne is vicinity.
-Please feel free to contact us, our customer service center is working for you 24/7.</description>
-    </item>
-    
-    <item>
       <title>Examining Runoff Ratio in Santa Cruz Creek Sub-basin</title>
       <link>/blog/1/01/01/project4/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -128,8 +118,22 @@ Please feel free to contact us, our customer service center is working for you 2
       
       <guid>/universal_blogs/migrate-from-jekyll/</guid>
       <description>Move static content to static Jekyll has a rule that any directory not starting with _ will be copied as-is to the _site output. Hugo keeps all static content under static. You should therefore move it all there. With Jekyll, something that looked like
-▾ &amp;lt;root&amp;gt;/ ▾ images/ logo.png  should become
-▾ &amp;lt;root&amp;gt;/ ▾ static/ ▾ images/ logo.png  Additionally, you&#39;ll want any files that should reside at the root (such as CNAME) to be moved to static.</description>
+▾ &amp;lt;root&amp;gt;/▾ images/logo.png should become
+▾ &amp;lt;root&amp;gt;/▾ static/▾ images/logo.png Additionally, you&#39;ll want any files that should reside at the root (such as CNAME) to be moved to static.</description>
+    </item>
+    
+    <item>
+      <title>Resume and Contact</title>
+      <link>/contact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/contact/</guid>
+      <description>Jessica Jagdeo jjagdeo@bren.ucsb.edu | (321) 277-3494 | Santa Barbara, CA
+EDUCATION Master of Environmental Science and Management (June 2020)
+  Bren School of Environmental Science &amp;amp; Management – University of California, Santa Barbara (UCSB)
+  Specialization: Water Resources Management | Focus: Environmental Data Science
+  Highlighted Coursework: Groundwater Management, Environmental Biogeochemistry, Sustainable Watershed Quality Management, Data Analysis, Geographic Information Systems
+  Leadership: Diversity Committee Student Representative, Environmental Justice Club Co-Chair</description>
     </item>
     
   </channel>

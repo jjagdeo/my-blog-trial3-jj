@@ -3,16 +3,6 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/categories/</loc>
-    <lastmod>2015-09-17T13:47:08+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/go/</loc>
-    <lastmod>2015-09-17T13:47:08+02:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/universal_blogs/go-is-for-lovers/</loc>
     <lastmod>2015-09-17T13:47:08+02:00</lastmod>
   </url>
@@ -23,23 +13,8 @@
   </url>
   
   <url>
-    <loc>/categories/programming/</loc>
-    <lastmod>2015-09-17T13:47:08+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
-    <lastmod>2015-09-17T13:47:08+02:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/universal_blogs/</loc>
     <lastmod>2015-09-17T13:47:08+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/hugo/</loc>
-    <lastmod>2015-08-03T13:39:46+02:00</lastmod>
   </url>
   
   <url>
@@ -48,17 +23,12 @@
   </url>
   
   <url>
-    <loc>/categories/pseudo/</loc>
-    <lastmod>2015-08-03T13:39:46+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/universal_blogs/2015-07-23-r-rmarkdown/</loc>
+    <loc>/categories/</loc>
     <lastmod>2015-07-23T21:13:14-05:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/plot/</loc>
+    <loc>/universal_blogs/2015-07-23-r-rmarkdown/</loc>
     <lastmod>2015-07-23T21:13:14-05:00</lastmod>
   </url>
   
@@ -68,27 +38,7 @@
   </url>
   
   <url>
-    <loc>/tags/r-markdown/</loc>
-    <lastmod>2015-07-23T21:13:14-05:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/regression/</loc>
-    <lastmod>2015-07-23T21:13:14-05:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/universal_blogs/creating-a-new-theme/</loc>
-    <lastmod>2015-06-24T13:50:46+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/starting/</loc>
-    <lastmod>2015-06-24T13:50:46+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/theme/</loc>
     <lastmod>2015-06-24T13:50:46+02:00</lastmod>
   </url>
   
@@ -102,10 +52,6 @@
   
   <url>
     <loc>/blog/1/01/01/project1/</loc>
-  </url>
-  
-  <url>
-    <loc>/contact/</loc>
   </url>
   
   <url>
@@ -125,15 +71,11 @@
   </url>
   
   <url>
+    <loc>/tags/hugo/</loc>
+  </url>
+  
+  <url>
     <loc>/universal_blogs/linked-post/</loc>
-  </url>
-  
-  <url>
-    <loc>/tags/ipsum/</loc>
-  </url>
-  
-  <url>
-    <loc>/categories/lorem/</loc>
   </url>
   
   <url>
@@ -141,11 +83,23 @@
   </url>
   
   <url>
-    <loc>/tags/programming/</loc>
+    <loc>/tags/plot/</loc>
+  </url>
+  
+  <url>
+    <loc>/tags/r-markdown/</loc>
+  </url>
+  
+  <url>
+    <loc>/contact/</loc>
   </url>
   
   <url>
     <loc>/tags/runoff/</loc>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
   </url>
   
   <url>

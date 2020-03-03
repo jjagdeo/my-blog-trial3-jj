@@ -1,9 +1,7 @@
 ---
 banner: img/banners/banner-5.jpg
 categories:
-- lorem
 tags:
-- ipsum
 title: Migrate from Jekyll
 twitter_author: jekyllrb
 ---
