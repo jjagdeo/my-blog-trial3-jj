@@ -73,3 +73,5 @@ santa_ynez_historical_quality <- santa_ynez_water_quality %>%
   santa_ynez_historical_quality
 
 ```
+
+**Figure 1.** Monthly sampling results of turbidity, total suspended solids, and total dissolved solids for the Santa Ynez Watershed from 1998 to 2018. Turbidity units in NTU and TSS and TDS units in mg/l. Data source: California State Water Resources Control Board, Environmental Protection Agency, Santa Ynez Chumash Environmental Office. 

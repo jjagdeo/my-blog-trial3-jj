@@ -139,3 +139,5 @@ selected_seasons_plot <- monthly_precip_runoff %>%
 selected_seasons_plot
 
 ```
+
+**Figure 1.** Yearly rates of runoff compared to precipitation for the Santa Ynez River Watershed during the rainy season from 1983 to 2018. Based on the runoff ratios, there tends to be low runoff associated with precipitation within the watershed during the rainy season. Precipitation obtained from the Santa Barbara County, Public Works Department Cachuma Dam Station; discharge obtained from the USGS Santa Cruz Creek flow gauge.

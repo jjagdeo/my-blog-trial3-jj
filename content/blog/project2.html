@@ -49,6 +49,7 @@ library(here)</code></pre>
   
 gibraltar_cap_plot</code></pre>
 <p><img src="/blog/project2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><strong>Figure 1.</strong> Historical Water Storage for Gibraltar 2001 - 2018. Source: Santa Barbara County, Public Works Department.</p>
 <pre class="r"><code>gibraltar_total_bathymetric &lt;- read_excel(&quot;RAW_Table of Bathymetric Data at 1400 Elevation.xlsx&quot;) %&gt;% 
   clean_names() %&gt;% 
   slice(1:23) %&gt;%  # Kept years and capacity data &amp; excluded irrelevant data 
@@ -112,4 +113,5 @@ gibraltar_vol_graph &lt;- ggplot(cumulative_bathymetric_inflow) +
 
 gibraltar_vol_graph</code></pre>
 <p><img src="/blog/project2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><strong>Figure 2.</strong> Reservoir Capacity of Gibraltar 1920 - 2019. The tan area indicates sediment accumulation within the reservoir, whereas the blue area indicates available water capacity. The solid black line represents the total capacity of the reservoir, including sedimentation. In 1949, the dam was raised, increasing the capacity of Gibraltar Reservoir. Source: City of Santa Barbara, Public Works Department.</p>
 </div>

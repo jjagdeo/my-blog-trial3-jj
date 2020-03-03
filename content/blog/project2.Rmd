@@ -64,6 +64,7 @@ gibraltar_cap_plot
 
 ```
 
+**Figure 1.** Historical Water Storage for Gibraltar 2001 - 2018. Source: Santa Barbara County, Public Works Department.
 
 ```{r}
 
@@ -122,3 +123,4 @@ gibraltar_vol_graph
 
 ```
 
+**Figure 2.** Reservoir Capacity of Gibraltar 1920 - 2019. The tan area indicates sediment accumulation within the reservoir, whereas the blue area indicates available water capacity. The solid black line represents the total capacity of the reservoir, including sedimentation. In 1949, the dam was raised, increasing the capacity of Gibraltar Reservoir. Source: City of Santa Barbara, Public Works Department.
